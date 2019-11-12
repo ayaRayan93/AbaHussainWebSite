@@ -1,0 +1,15 @@
+﻿@model IEnumerable<AbaHussainWebSite.Models.Services>
+@foreach (var item in Model)
+{
+<div class="col-md-3 d-flex services align-self-stretch p-4 ftco-animate">
+    <div class="media block-6 d-block text-center">
+        <div class="icon d-flex justify-content-center align-items-center">
+            <img src="@Url.Content(item.img)" />
+        </div>
+        <div class="media-body p-2 mt-3">
+            <a href="categories.html" class="nav-link"><h3 class="heading">@Html.DisplayFor(modelItem => item.Name)</h3></a>
+            <p>@Html.DisplayFor(modelItem => item.textServe)</p>
+        </div>
+    </div>
+</div>
+}

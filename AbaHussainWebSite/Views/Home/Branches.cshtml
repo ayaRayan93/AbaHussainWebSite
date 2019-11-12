@@ -1,0 +1,28 @@
+﻿@model IEnumerable<AbaHussainWebSite.Models.Branches>
+<section class="ftco-section ftco-no-pt ftco-no-pb">
+    <div>
+        <h3 class="heading">الفروع</h3>
+        <div class="container-fluid">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-3" style="float: right;text-align: right" width="260px" height="280px">
+                        @{
+                            //string imageBase64 = Convert.ToBase64String(item.mainImg);
+                            string imageSrc = item.mainImg;
+                            <img src="@Url.Content(imageSrc)" width="240px" height="240px" alt="service1" />
+                        }
+
+                        <div>
+                            <a href="branch2.html"><h4 style="color: #007bff">@Html.DisplayFor(modelItem => item.Title) </h4></a>
+                            <h5>@Html.DisplayFor(modelItem => item.phone)</h5>
+                            <a href="https://goo.gl/maps/h43woi765StdNXua9" style="font-size:16px">@Html.DisplayFor(modelItem => item.AddBranche)</a>
+                            @Html.ActionLink("تفاصيل", "Details", new { id = item.BID })
+                            
+                        </div>
+                    </div>
+                            }
+            </div>
+            </div>
+    </div>
+</section>

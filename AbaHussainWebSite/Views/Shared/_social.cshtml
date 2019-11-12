@@ -1,0 +1,5 @@
+﻿@model IEnumerable<AbaHussainWebSite.Models.SocialMedia>
+@foreach (var item in Model)
+{
+<li class="ftco-animate"><a href="@Html.DisplayFor(modelItem => item.link)"><span class="icon-@Html.DisplayFor(modelItem => item.icon)"></span></a></li>
+}

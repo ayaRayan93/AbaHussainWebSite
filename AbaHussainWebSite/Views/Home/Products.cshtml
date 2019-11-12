@@ -1,0 +1,101 @@
+﻿@model IEnumerable<AbaHussainWebSite.Models.SubCategory>
+        <div class="fs_menu_overlay"></div>
+        <!-- Hamburger Menu -->
+        <div class="container">
+            <div class="row">
+                <div class="col product_section clearfix">
+                    <!-- Sidebar -->
+                    <div class="sidebar" dir="rtl" style="float:right;text-align: right;">
+                        <div class="sidebar_section">
+                            <div class="sidebar_title">
+                                <h5>التصنيفات</h5>
+                            </div>
+                            <ul class="sidebar_categories">
+                                @{
+                                    string str = ViewBag.service;
+                                    string[] arr = str.Split(',');
+                                    for (int i = 0; i < arr.Length - 1; i++)
+                                    {
+                                        <li>@Html.ActionLink(arr[i]+" ", "GetProducts", "Home",new { Service_Name= arr[i] },null)</li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- Main Content -->
+                    <div class="main_content" style="float:right; margin:10px">
+                        <!-- Products -->
+                        <div class="products_iso">
+                            <div class="row">
+                                
+                                    <!-- Product Sorting -->
+                                <div class="col-8">
+                                   
+                                </div>
+                                    <div class="col-12">
+                                       <select class="browser-default custom-select" onchange="select_onchange();" id="selTab">
+                                            <option selected value="x">الاقسام الداخلية</option>
+                                            @foreach (var item in Model)
+                                            {
+                                             <option value="@Html.DisplayFor(m => item.SubCategoryID)"> 
+                                                 @*@Html.ActionLink(item.SubCateName, "DisplayProduct", "Home", new { id = item.SubCategoryID }, new { @class = "text-primary" })*@
+                                                 <ul class="sidebar_categories">
+
+                                                         <li>@Html.ActionLink(item.SubCateName, "DisplayProduct", "Home", new { id = item.SubCategoryID }, new { @class = "text-primary" })</li>
+                                                     
+
+                                                 </ul>
+                                             </option>
+                                            }
+                                        </select>
+                                        @*<ul class="sidebar_categories">
+                                            
+                                                @foreach (var item in Model)
+                                                {
+                                                    <li>@Html.ActionLink(item.SubCateName, "DisplayProduct", "Home", new { id = item.SubCategoryID }, new { @class = "text-primary" })</li>
+                                                }
+                                            
+                                        </ul>*@
+                                    </div>
+                                </div>
+                            <div class="row"  style="margin-top:10px">
+                                <div class="col">
+                                    <!-- Product Grid -->
+                                    <div class="container" style="clear: right;">
+                             @{Html.RenderAction("DisplayProduct", "Home");
+                            }
+                                  
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+<script type="text/javascript">
+
+
+        $(function () {
+            var val = $("#selTab").val().split("$");
+            setTab(val[0]);
+            $("#lblTypeValue").text(val[1]);
+        });
+
+        function setTab(value) {
+            $('#myTabs a[href="#tab' + value + 'default"]').tab('show');
+        }
+
+        function select_onchange(sel) {
+            var val = sel.value.split("$");
+            setTab(val[0]);
+            $("#lblTypeValue").text(val[1]);
+        }
+
+</script>
+
+

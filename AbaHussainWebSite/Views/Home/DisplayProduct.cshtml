@@ -1,0 +1,30 @@
+﻿@model System.Data.DataTable
+<div class="row">
+    <!-- Product 1 -->
+    @for(int i = 0; i < Model.Rows.Count; i++)
+    {
+
+            <div class="col-sm">
+                <div class="product discount product_filter">
+                    <div class="product_image">
+                        <img src="~/images/branches/branch1/b1.jpeg" width="180px" height="180px" alt="">
+                    </div>
+                    <div class="favorite favorite_left"></div>
+
+                    <div class="product_info">
+                        <h6 class="product_name">
+                            <a href="single.html">
+                                @Html.DisplayFor(modelItem => Model.Rows[i]["Text"])
+                            </a>
+                        </h6>
+                        <div class="product_price">@Html.DisplayFor(modelItem => Model.Rows[i]["Price"])</div>
+                    </div>
+                </div>
+            </div>
+
+        
+    }
+</div>
+
+
+
