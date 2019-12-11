@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="caa0a7c4d276483e9e6cee03e063c3ff" Name="Diagram1">
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.Basics" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.BranchDetail" Width="1.5" PointX="8" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.Branches" Width="1.5" PointX="5.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.ImageBackground" Width="1.5" PointX="3" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.imgNew" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.Products" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.Services" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.SocialMedia" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.SubCategory" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="hamdymor_abahussainModel.sysdiagrams" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="true" />
+        <AssociationConnector Association="hamdymor_abahussainModel.FK_ImageBackground_Basics" ManuallyRouted="false" />
+        <AssociationConnector Association="hamdymor_abahussainModel.FK_BranchDetail_Branches" ManuallyRouted="false" />
+        <AssociationConnector Association="hamdymor_abahussainModel.FK_Products_SubCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="hamdymor_abahussainModel.FK_SubCategory_Services" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
