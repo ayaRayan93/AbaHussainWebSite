@@ -47,50 +47,52 @@ namespace AbaHussainWebSite.Controllers
             return Redirect("Login");
         }
         public ActionResult Home(string addr)
-        {
-            try
+        {if (Session["UserLog"] != null)
             {
-                con.Open();
-                com = new SqlCommand("select * from Basics",con);
-                SqlDataReader dr = com.ExecuteReader();
-                DataTable dt = new DataTable();
-                dt.Load(dr);
-                int brow = 0;
-                int benrow = 0;
-                for (int t = 0; t < dt.Rows.Count; t++)
+                try
                 {
-                    if (!String.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"])))
+                    con.Open();
+                    com = new SqlCommand("select * from Basics", con);
+                    SqlDataReader dr = com.ExecuteReader();
+                    DataTable dt = new DataTable();
+                    dt.Load(dr);
+                    int brow = 0;
+                    int benrow = 0;
+                    for (int t = 0; t < dt.Rows.Count; t++)
                     {
-                        brow = int.Parse(dt.Rows[t]["BasicID"].ToString());
-                        benrow = brow + 1;
+                        if (!String.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"])))
+                        {
+                            brow = int.Parse(dt.Rows[t]["BasicID"].ToString());
+                            benrow = brow + 1;
 
+                        }
                     }
-                }
-                if (brow != 0 && benrow != 0)
-                {
-                    Basics j = new Basics();
-                    com = new SqlCommand("select * from Basics where BasicID=" + brow + " ", con);
-                    SqlCommand com1 = new SqlCommand("select * from Basics where BasicID=" + benrow + " ", con);
-                    SqlDataReader SqlDr = com.ExecuteReader();
-                    DataTable dtt = new DataTable();
-                    dtt.Load(SqlDr);
+                    if (brow != 0 && benrow != 0)
+                    {
+                        Basics j = new Basics();
+                        com = new SqlCommand("select * from Basics where BasicID=" + brow + " ", con);
+                        SqlCommand com1 = new SqlCommand("select * from Basics where BasicID=" + benrow + " ", con);
+                        SqlDataReader SqlDr = com.ExecuteReader();
+                        DataTable dtt = new DataTable();
+                        dtt.Load(SqlDr);
 
-                    SqlDataReader SqlDr1 = com1.ExecuteReader();
-                    DataTable dtt1 = new DataTable();
-                    dtt1.Load(SqlDr1);
+                        SqlDataReader SqlDr1 = com1.ExecuteReader();
+                        DataTable dtt1 = new DataTable();
+                        dtt1.Load(SqlDr1);
 
-                    j.email = dtt.Rows[0]["email"].ToString();
-                    j.Address = dtt.Rows[0]["Address"].ToString();
-                    j.website = dtt.Rows[0]["website"].ToString();
-                    j.callus = dtt.Rows[0]["callus"].ToString();
-                   ViewBag.addr = dtt1.Rows[0]["Address"].ToString();
-                  
-                   return View(j);
+                        j.email = dtt.Rows[0]["email"].ToString();
+                        j.Address = dtt.Rows[0]["Address"].ToString();
+                        j.website = dtt.Rows[0]["website"].ToString();
+                        j.callus = dtt.Rows[0]["callus"].ToString();
+                        ViewBag.addr = dtt1.Rows[0]["Address"].ToString();
+
+                        return View(j);
+                    }
+                    return View();
                 }
-                return View();
+                catch { return View(); }
             }
-            catch { return View(); }
-                
+            else { return Redirect("Login"); }   
         }
         [HttpPost]
         public ActionResult Home(Basics bas, string addr)
@@ -142,8 +144,11 @@ namespace AbaHussainWebSite.Controllers
         }
         public ActionResult mainText()
         {
-
-            return View();
+            if (Session["UserLog"] != null)
+            {
+                return View();
+            }
+            else { return Redirect("Login"); }
         }
         [HttpPost]
         public ActionResult mainText(Basics bas, string enourServtxt, string headerMidtxt, string enParagMidtxt, string maintextNews, string mainImagText1, string mainImagText2, string parImgtxt, string midHeaderIndexPage, string midParaIndexPage)
@@ -162,9 +167,12 @@ namespace AbaHussainWebSite.Controllers
             catch(Exception ex) { ViewBag.Emsg = "your Data didn't insert correctly"; return View(); }
         }
         public ActionResult socialmedia()
-        {
-            DDLSocialMedia();
-            return View();
+        {if (Session["UserLog"] != null)
+            {
+                DDLSocialMedia();
+                return View();
+            }
+            else { return Redirect("Login"); }
         }
         [HttpPost]
         public ActionResult socialmedia(SocialMedia sM)
@@ -274,9 +282,12 @@ namespace AbaHussainWebSite.Controllers
 
         }
         public ActionResult subcategory()
-        {
-            DDlSevices();
-            return View();
+        {if (Session["UserLog"] != null)
+            {
+                DDlSevices();
+                return View();
+            }
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult subcategory(SubCategory sub)
@@ -329,8 +340,11 @@ namespace AbaHussainWebSite.Controllers
             return PartialView("_subcat", dt);
         }
         public ActionResult LastNew()
-        {
-            return View();
+        {if (Session["UserLog"] != null)
+            {
+                return View();
+            }
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult LastNew(imgNew singlenews)
@@ -366,10 +380,12 @@ namespace AbaHussainWebSite.Controllers
             return PartialView("_lastNew", dt);
         }
         public ActionResult products()
-        {
-            DDlsub();
-
-            return View();
+        {if (Session["UserLog"] != null)
+            {
+                DDlsub();
+                return View();
+            }
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult products(Products pro)
@@ -433,27 +449,30 @@ namespace AbaHussainWebSite.Controllers
             return PartialView("_product", dt);
         }
         public ActionResult Services()
-        {
-            try
+        {if (Session["UserLog"] != null)
             {
-                con.Open();
-                com = new SqlCommand("select * from SubCategory ", con);
-                SqlDataReader SqlDr = com.ExecuteReader();
-                DataTable d = new DataTable();
-                d.Load(SqlDr);
-                List<SubCategory> List = new List<SubCategory>();
-                for (int t = 0; t < d.Rows.Count; t++)
+                try
                 {
-                    int id = int.Parse(d.Rows[t]["SubCategoryID"].ToString());
-                    string name = d.Rows[t]["SubCateName"].ToString();
-                    List.Add(new SubCategory() { SubCategoryID = id, SubCateName = name });
-                    ViewData["listsub"] = new SelectList(List, "ServicesID", "Name");
-                }
+                    con.Open();
+                    com = new SqlCommand("select * from SubCategory ", con);
+                    SqlDataReader SqlDr = com.ExecuteReader();
+                    DataTable d = new DataTable();
+                    d.Load(SqlDr);
+                    List<SubCategory> List = new List<SubCategory>();
+                    for (int t = 0; t < d.Rows.Count; t++)
+                    {
+                        int id = int.Parse(d.Rows[t]["SubCategoryID"].ToString());
+                        string name = d.Rows[t]["SubCateName"].ToString();
+                        List.Add(new SubCategory() { SubCategoryID = id, SubCateName = name });
+                        ViewData["listsub"] = new SelectList(List, "ServicesID", "Name");
+                    }
 
-                con.Close();
+                    con.Close();
+                }
+                catch { con.Close(); }
+                return View();
             }
-            catch { con.Close(); }
-            return View();
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult services(Services serv)
@@ -508,8 +527,11 @@ namespace AbaHussainWebSite.Controllers
             return PartialView("_Branches", dt);
         }
         public ActionResult AllBranches()
-        {
-            return View();
+        {if (Session["UserLog"] != null)
+            {
+                return View();
+            }
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult AllBranches(Branches br)
@@ -588,10 +610,13 @@ namespace AbaHussainWebSite.Controllers
             catch { con.Close(); return 0; }
         }
         public ActionResult Details()
-        {
-            return View();
+        {if (Session["UserLog"] != null)
+            {
+                return View();
+            }
+            else return Redirect("Login");
         }
-        [HttpGet]
+        [HttpPost]
         public ActionResult Details(int id)
         {
             try
@@ -615,27 +640,29 @@ namespace AbaHussainWebSite.Controllers
         //----------------------------------------edit data in table ----------------------
         [HttpGet]
         public ActionResult EditBranch(int id)
-        {
-            try
+        {if (Session["UserLog"] != null)
             {
-                con.Open();
-                Branches j = new Branches();
-                com = new SqlCommand("select * from Branches where BID=" + id + " ", con);
-                SqlDataReader SqlDr = com.ExecuteReader();
-                DataTable dt = new DataTable();
-                dt.Load(SqlDr);
-                j.BID = id;
-                j.Title = dt.Rows[0]["Title"].ToString();
-                j.enTitle = dt.Rows[0]["enTitle"].ToString();
-                j.phone = dt.Rows[0]["phone"].ToString();
-                j.AddBranche = dt.Rows[0]["AddBranche"].ToString();
-                j.enAddrBranch = dt.Rows[0]["enAddrBranch"].ToString();
-                j.mainImg = dt.Rows[0]["mainImg"].ToString();
-                con.Close();
-                return View(j);
+                try
+                {
+                    con.Open();
+                    Branches j = new Branches();
+                    com = new SqlCommand("select * from Branches where BID=" + id + " ", con);
+                    SqlDataReader SqlDr = com.ExecuteReader();
+                    DataTable dt = new DataTable();
+                    dt.Load(SqlDr);
+                    j.BID = id;
+                    j.Title = dt.Rows[0]["Title"].ToString();
+                    j.enTitle = dt.Rows[0]["enTitle"].ToString();
+                    j.phone = dt.Rows[0]["phone"].ToString();
+                    j.AddBranche = dt.Rows[0]["AddBranche"].ToString();
+                    j.enAddrBranch = dt.Rows[0]["enAddrBranch"].ToString();
+                    j.mainImg = dt.Rows[0]["mainImg"].ToString();
+                    con.Close();
+                    return View(j);
+                }
+                catch { ViewBag.Emsg = "Error occured"; return View(); };
             }
-            catch { ViewBag.Emsg = "Error occured"; return View(); };
-
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult EditBranch(Branches bran)
@@ -691,26 +718,28 @@ namespace AbaHussainWebSite.Controllers
 
         [HttpGet]
         public ActionResult EditServ(int id)
-        {
-            try
+        {if (Session["UserLog"] != null)
             {
-                con.Open();
-                Services j = new Services();
-                com = new SqlCommand("select * from Services where ServicesID=" + id + " ", con);
-                SqlDataReader SqlDr = com.ExecuteReader();
-                DataTable dt = new DataTable();
-                dt.Load(SqlDr);
-                j.ServicesID = int.Parse(dt.Rows[0]["ServicesID"].ToString());
-                j.Name = dt.Rows[0]["Name"].ToString();
-                j.textServe = dt.Rows[0]["textServe"].ToString();
-                j.enName = dt.Rows[0]["enName"].ToString();
-                j.entxtServe = dt.Rows[0]["entxtServe"].ToString();
-                j.img = dt.Rows[0]["img"].ToString();
-                con.Close();
-                return View(j);
+                try
+                {
+                    con.Open();
+                    Services j = new Services();
+                    com = new SqlCommand("select * from Services where ServicesID=" + id + " ", con);
+                    SqlDataReader SqlDr = com.ExecuteReader();
+                    DataTable dt = new DataTable();
+                    dt.Load(SqlDr);
+                    j.ServicesID = int.Parse(dt.Rows[0]["ServicesID"].ToString());
+                    j.Name = dt.Rows[0]["Name"].ToString();
+                    j.textServe = dt.Rows[0]["textServe"].ToString();
+                    j.enName = dt.Rows[0]["enName"].ToString();
+                    j.entxtServe = dt.Rows[0]["entxtServe"].ToString();
+                    j.img = dt.Rows[0]["img"].ToString();
+                    con.Close();
+                    return View(j);
+                }
+                catch { ViewBag.Emsg = "Error occured"; return View(); };
             }
-            catch { ViewBag.Emsg = "Error occured"; return View(); };
-
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult EditServ(Services serv)
@@ -742,27 +771,29 @@ namespace AbaHussainWebSite.Controllers
 
         [HttpGet]
         public ActionResult EditimgNew(int id)
-        {
-            try
+        {if (Session["UserLog"] != null)
             {
-                con.Open();
-                imgNew j = new imgNew();
-                com = new SqlCommand("select * from imgNew where NewID=" + id + " ", con);
-                SqlDataReader SqlDr = com.ExecuteReader();
-                DataTable dt = new DataTable();
-                dt.Load(SqlDr);
-                j.NewID = int.Parse(dt.Rows[0]["NewID"].ToString());
-                j.Headertxt = dt.Rows[0]["Headertxt"].ToString();
-                j.Maintxt = dt.Rows[0]["Maintxt"].ToString();
-                j.enHeadertxt = dt.Rows[0]["enHeadertxt"].ToString();
-                j.enMaintxt = dt.Rows[0]["enMaintxt"].ToString();
-                j.img = dt.Rows[0]["img"].ToString();
-                j.DateNew = Convert.ToDateTime(dt.Rows[0]["DateNew"].ToString());
-                con.Close();
-                return View(j);
+                try
+                {
+                    con.Open();
+                    imgNew j = new imgNew();
+                    com = new SqlCommand("select * from imgNew where NewID=" + id + " ", con);
+                    SqlDataReader SqlDr = com.ExecuteReader();
+                    DataTable dt = new DataTable();
+                    dt.Load(SqlDr);
+                    j.NewID = int.Parse(dt.Rows[0]["NewID"].ToString());
+                    j.Headertxt = dt.Rows[0]["Headertxt"].ToString();
+                    j.Maintxt = dt.Rows[0]["Maintxt"].ToString();
+                    j.enHeadertxt = dt.Rows[0]["enHeadertxt"].ToString();
+                    j.enMaintxt = dt.Rows[0]["enMaintxt"].ToString();
+                    j.img = dt.Rows[0]["img"].ToString();
+                    j.DateNew = Convert.ToDateTime(dt.Rows[0]["DateNew"].ToString());
+                    con.Close();
+                    return View(j);
+                }
+                catch { ViewBag.Emsg = "Error occured"; return View(); };
             }
-            catch { ViewBag.Emsg = "Error occured"; return View(); };
-
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult EditimgNew(imgNew im)
@@ -796,24 +827,26 @@ namespace AbaHussainWebSite.Controllers
 
         [HttpGet]
         public ActionResult Editsubcate(int id)
-        {
-            try
+        {if (Session["UserLog"] != null)
             {
-                con.Open();
-                SubCategory j = new SubCategory();
-                com = new SqlCommand("select * from SubCategory where SubCategoryID=" + id + " ", con);
-                SqlDataReader SqlDr = com.ExecuteReader();
-                DataTable dt = new DataTable();
-                dt.Load(SqlDr);
-                j.SubCategoryID = int.Parse(dt.Rows[0]["SubCategoryID"].ToString());
-                j.SubCateName = dt.Rows[0]["SubCateName"].ToString();
-                j.enSubName = dt.Rows[0]["enSubName"].ToString();
-                DDlSevices();
-                con.Close();
-                return View(j);
+                try
+                {
+                    con.Open();
+                    SubCategory j = new SubCategory();
+                    com = new SqlCommand("select * from SubCategory where SubCategoryID=" + id + " ", con);
+                    SqlDataReader SqlDr = com.ExecuteReader();
+                    DataTable dt = new DataTable();
+                    dt.Load(SqlDr);
+                    j.SubCategoryID = int.Parse(dt.Rows[0]["SubCategoryID"].ToString());
+                    j.SubCateName = dt.Rows[0]["SubCateName"].ToString();
+                    j.enSubName = dt.Rows[0]["enSubName"].ToString();
+                    DDlSevices();
+                    con.Close();
+                    return View(j);
+                }
+                catch { ViewBag.Emsg = "Error occured"; return View(); };
             }
-            catch { ViewBag.Emsg = "Error occured"; return View(); };
-
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult Editsubcate(SubCategory sub)
@@ -839,27 +872,29 @@ namespace AbaHussainWebSite.Controllers
         
               [HttpGet]
         public ActionResult Editproduct(int id)
-        {
-            try
+        {if (Session["UserLog"] != null)
             {
-                DDlsub();
-                con.Open();
-                Products j = new Products();
-                com = new SqlCommand("select * from Products where ProductID=" + id + " ", con);
-                SqlDataReader SqlDr = com.ExecuteReader();
-                DataTable dt = new DataTable();
-                dt.Load(SqlDr);
-                j.ProductID = int.Parse(dt.Rows[0]["ProductID"].ToString());
-                j.Text = dt.Rows[0]["Text"].ToString();
-                j.enText = dt.Rows[0]["enText"].ToString();
-                j.Price = decimal.Parse(dt.Rows[0]["Price"].ToString());
-                j.img = dt.Rows[0]["img"].ToString();
-                
-                con.Close();
-                return View(j);
-            }
-            catch { ViewBag.Emsg = "Error occured"; return View(); };
+                try
+                {
+                    DDlsub();
+                    con.Open();
+                    Products j = new Products();
+                    com = new SqlCommand("select * from Products where ProductID=" + id + " ", con);
+                    SqlDataReader SqlDr = com.ExecuteReader();
+                    DataTable dt = new DataTable();
+                    dt.Load(SqlDr);
+                    j.ProductID = int.Parse(dt.Rows[0]["ProductID"].ToString());
+                    j.Text = dt.Rows[0]["Text"].ToString();
+                    j.enText = dt.Rows[0]["enText"].ToString();
+                    j.Price = decimal.Parse(dt.Rows[0]["Price"].ToString());
+                    j.img = dt.Rows[0]["img"].ToString();
 
+                    con.Close();
+                    return View(j);
+                }
+                catch { ViewBag.Emsg = "Error occured"; return View(); };
+            }
+            else return Redirect("Login");
         }
         [HttpPost]
         public ActionResult Editproduct(Products pro)
