@@ -12,7 +12,9 @@ namespace AbaHussainWebSite.Controllers
 {
     public class DashController : Controller
     {
-        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=maindb;Integrated Security=True");
+        SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
+
+        // SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=maindb;Integrated Security=True");
         SqlCommand com;
 
         // GET: Dash
@@ -44,10 +46,51 @@ namespace AbaHussainWebSite.Controllers
             Session["UserLog"] = null;
             return Redirect("Login");
         }
-        public ActionResult Home()
+        public ActionResult Home(string addr)
         {
+            try
+            {
+                con.Open();
+                com = new SqlCommand("select * from Basics",con);
+                SqlDataReader dr = com.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(dr);
+                int brow = 0;
+                int benrow = 0;
+                for (int t = 0; t < dt.Rows.Count; t++)
+                {
+                    if (!String.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"])))
+                    {
+                        brow = int.Parse(dt.Rows[t]["BasicID"].ToString());
+                        benrow = brow + 1;
 
-            return View();
+                    }
+                }
+                if (brow != 0 && benrow != 0)
+                {
+                    Basics j = new Basics();
+                    com = new SqlCommand("select * from Basics where BasicID=" + brow + " ", con);
+                    SqlCommand com1 = new SqlCommand("select * from Basics where BasicID=" + benrow + " ", con);
+                    SqlDataReader SqlDr = com.ExecuteReader();
+                    DataTable dtt = new DataTable();
+                    dtt.Load(SqlDr);
+
+                    SqlDataReader SqlDr1 = com1.ExecuteReader();
+                    DataTable dtt1 = new DataTable();
+                    dtt1.Load(SqlDr1);
+
+                    j.email = dtt.Rows[0]["email"].ToString();
+                    j.Address = dtt.Rows[0]["Address"].ToString();
+                    j.website = dtt.Rows[0]["website"].ToString();
+                    j.callus = dtt.Rows[0]["callus"].ToString();
+                   ViewBag.addr = dtt1.Rows[0]["Address"].ToString();
+                  
+                   return View(j);
+                }
+                return View();
+            }
+            catch { return View(); }
+                
         }
         [HttpPost]
         public ActionResult Home(Basics bas, string addr)
@@ -56,17 +99,44 @@ namespace AbaHussainWebSite.Controllers
             {
 
                 con.Open();
-                com = new SqlCommand("insert into  Basics(email,Address,website,callus) Values ('" + bas.email + "',N'" + bas.Address + "','" + bas.website + "','" + bas.callus + "')", con);
-                com.ExecuteNonQuery();
-                com = new SqlCommand("insert into  Basics(Address) Values ('" + addr + "')", con);
-                com.ExecuteNonQuery();
-                con.Close();
-                ViewBag.msg = "your Data inserted successfully";
+                com = new SqlCommand("select * from Basics",con);
+                SqlDataReader dr = com.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(dr);
+                int brow = 0;
+                int benrow = 0;
+                for (int t = 0; t < dt.Rows.Count; t++)
+                {
+                    if (!string.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"] )))
+                    {
+                        brow=int.Parse(dt.Rows[t]["BasicID"].ToString());
+                        benrow = brow + 1;
+
+                    }
+                }
+                if (brow == 0 && benrow == 0)
+                {
+                    com = new SqlCommand("insert into  Basics(email,Address,website,callus) Values ('" + bas.email + "',N'" + bas.Address + "','" + bas.website + "','" + bas.callus + "')", con);
+                    com.ExecuteNonQuery();
+                    com = new SqlCommand("insert into  Basics(Address) Values ('" + addr + "')", con);
+                    com.ExecuteNonQuery();
+                    con.Close();
+                    ViewBag.msg = "your Data inserted successfully";
+                }
+                else
+                {
+                    com = new SqlCommand("update Basics set email='"+ bas.email + "',Address=N'"+ bas.Address + "',website='" + bas.website + "',callus='" + bas.callus + "' where BasicID="+brow, con);
+                    com.ExecuteNonQuery();
+                    com = new SqlCommand("update   Basics set Address='" + addr + "' where BasicID="+benrow, con);
+                    com.ExecuteNonQuery();
+                    con.Close();
+                    ViewBag.msg = "your Data Edited successfully";
+                }
                 return View();
             }
             catch
             {
-                ViewBag.msg = "your Data didn't insert correctly";
+                ViewBag.Emsg = "your Data didn't insert correctly";
                 return View();
             }
         }

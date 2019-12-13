@@ -199,7 +199,9 @@ namespace AbaHussainWebSite.Controllers
                                              select e);
             return View(Branches);
         }
-        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussain;Integrated Security=True");
+        SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
+
+       // SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussain;Integrated Security=True");
         SqlCommand com;
         [HttpGet]
         public ActionResult Details(int id)
