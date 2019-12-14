@@ -24,6 +24,7 @@
 {
     @Html.AntiForgeryToken()
     <p style="color:red">@ViewBag.Emsg</p>
+    <p style="color:green">@ViewBag.msg</p>
     <div class="form-horizontal">
        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <h2>نصوص الصفحة الرئيسية</h2>
@@ -34,13 +35,24 @@
                   
                     <div class="col-md-12">
                         <label class="control-label">  النص الرئيسي للخدمات بالعربي</label>
-                        <textarea name="ourServtxt" class="form-control" cols="7" rows="3"></textarea>
+                       @Html.TextAreaFor(m => m.ourServtxt, 3, 7, new { @class = "form-control" })
+                         @*<textarea name="ourServtxt" value='@Model.ourServtxt' class="form-control" cols="7" rows="3"></textarea>*@
+                            
                         @Html.ValidationMessageFor(model => model.ourServtxt, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="col-md-12">
                         <label class="control-label">النص الرئيسي للخدمات بالانجليزي</label>
-                        <textarea name="enourServtxt" class="form-control" cols="7" rows="3"></textarea>
+                        @{ if (ViewBag.enourServtxt != null)
+                            {
+                                 @Html.TextArea("enourServtxt", (string)ViewBag.enourServtxt, 3, 7, new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.TextArea("enourServtxt", (string)ViewBag.enourServtxt, 3, 7, new { @class = "form-control" })
+
+                            }
+                        }
                         @Html.ValidationMessageFor(model => model.ourServtxt, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -57,7 +69,12 @@
         </div>
         <div class="col-md-12">
             <label class="control-label"> عنوان النص  بالانجليزي</label>
-           <input type="text" class="form-control" name="headerMidtxt" />
+            @{ if (ViewBag.headerMidtxt != null) {
+           <input type="text" class="form-control" value='@ViewBag.headerMidtxt' name="enheaderMidtxt" />
+                }
+                else
+                {<input type="text" class="form-control"  name="enheaderMidtxt" /> }
+            }
            </div>
     </div>
 
@@ -70,7 +87,12 @@
         </div>
         <div class="col-md-12">
             <label class="control-label"> النص بالانجليزي</label>
-            <textarea class="form-control" name="enParagMidtxt" cols="7" rows="3"></textarea>
+            @{ if (ViewBag.enParagMidtxt != null)
+                {
+            <textarea class="form-control" name="enParagMidtxt" value='@ViewBag.enParagMidtxt' cols="7" rows="3"></textarea>
+                }
+                else {<textarea class="form-control" name="enParagMidtxt" cols="7" rows="3"></textarea>}
+            }
             </div>
        </div>
 <hr/>
@@ -83,8 +105,15 @@
         </div>
         <div class="col-md-12">
             <label class="control-label">عنوان النص بالانجليزي </label>
-            <input type="text" name="maintextNews" class = "form-control" />
-           
+            @{if (ViewBag.maintextNews != null)
+                {
+            <input type="text" name="enmaintextNews" value='@ViewBag.maintextNews' class = "form-control" />
+                }
+                else
+                {<input type="text" name="enmaintextNews"  class="form-control" />}
+
+            }
+
         </div>
     </div>
 <hr/>
@@ -97,7 +126,14 @@
         </div>  
         <div class="col-md-12">
             <label class="control-label"> عنوان النص الرئيسي بالانجليزي </label>
-             <input type="text" name="mainImagText1" class = "form-control" />
+            @{if (ViewBag.mainImagText1 != null)
+            {
+             <input type="text" name="enmainImagText1" value='@ViewBag.mainImagText1' class = "form-control" />
+            }
+            else
+            {<input type="text" name="enmainImagText1" class="form-control" />
+            }
+            }
          </div>      
     </div>
     <div class="form-group">
@@ -109,7 +145,15 @@
         </div>
         <div class="col-md-12">
             <label class="control-label">النص الرئيسي الثاني بالانجليزي</label>
-            <input type="text" name="mainImagText2" class = "form-control" />
+            @{ if (ViewBag.mainImagText2 != null)
+                {
+            <input type="text" name="enmainImagText2" value='@ViewBag.mainImagText2' class = "form-control" />
+                }
+                else
+                {
+                 <input type="text" name="enmainImagText2" class="form-control" />
+                }
+            }
          </div>
     </div>
     <div class="form-group">
@@ -120,7 +164,14 @@
         </div>
         <div class="col-md-12">
             <label class="control-label"> النص الفرعي بالانجليزي  </label>
-            <input type="text" name="parImgtxt" class = "form-control" />
+            @{ if (ViewBag.parImgtxt != null)
+                {
+            <input type="text" name="enparImgtxt" value='@ViewBag.parImgtxt' class = "form-control" />
+                }
+                else
+                {  <input type="text" name="enparImgtxt"  class="form-control" />
+                }
+            }
          </div>
     </div>
      <hr/>
@@ -133,7 +184,15 @@
         </div>
         <div class="col-md-12">
             <label class="control-label">النص بالانجليزي</label>
-            <input type="text" name="midHeaderIndexPage" class = "form-control" />
+            @{ if (ViewBag.midHeaderIndexPage != null)
+                {
+            <input type="text" name="enmidHeaderIndexPage"value='@ViewBag.midHeaderIndexPage' class = "form-control" />
+                }
+                else
+                {
+                 <input type="text" name="enmidHeaderIndexPage" class="form-control" />
+                }
+            }
         </div>
     </div>
     <div class="form-group">
@@ -145,7 +204,13 @@
         </div>
         <div class="col-md-12">
             <label class="control-label ">النص الفرعي بالانجليزي </label>
-           <input type="text" name="midParaIndexPage" class = "form-control"/>
+            @{if (ViewBag.midParaIndexPage != null)
+                {
+           <input type="text" name="enmidParaIndexPage" value='@ViewBag.midParaIndexPage' class = "form-control"/>
+                }
+                else
+                { <input type="text" name="enmidParaIndexPage" class="form-control" /> }
+            }
             </div>
     </div>
             <br />
@@ -160,5 +225,5 @@
 
 
         </div>
-<p style="color:green">@ViewBag.msg</p>
+
 }
