@@ -24,6 +24,7 @@
 {
     @Html.AntiForgeryToken()
     <p style="color:red">@ViewBag.Emsg</p>
+    <p style="color:green">@ViewBag.msg</p>
     <div class="form-horizontal">
        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <h2>نصوص الصفحة الرئيسية</h2>
@@ -160,5 +161,5 @@
 
 
         </div>
-<p style="color:green">@ViewBag.msg</p>
+
 }

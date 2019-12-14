@@ -51,23 +51,12 @@ namespace AbaHussainWebSite.Controllers
             {
                 try
                 {
+                    int []ar = new int[2];
+                       ar = getids();
+                    int brow = ar[0];
+                    int benrow = ar[1];
                     con.Open();
-                    com = new SqlCommand("select * from Basics", con);
-                    SqlDataReader dr = com.ExecuteReader();
-                    DataTable dt = new DataTable();
-                    dt.Load(dr);
-                    int brow = 0;
-                    int benrow = 0;
-                    for (int t = 0; t < dt.Rows.Count; t++)
-                    {
-                        if (!String.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"])))
-                        {
-                            brow = int.Parse(dt.Rows[t]["BasicID"].ToString());
-                            benrow = brow + 1;
-
-                        }
-                    }
-                    if (brow != 0 && benrow != 0)
+                    if (brow != 0 && benrow!=0)
                     {
                         Basics j = new Basics();
                         com = new SqlCommand("select * from Basics where BasicID=" + brow + " ", con);
@@ -85,7 +74,7 @@ namespace AbaHussainWebSite.Controllers
                         j.website = dtt.Rows[0]["website"].ToString();
                         j.callus = dtt.Rows[0]["callus"].ToString();
                         ViewBag.addr = dtt1.Rows[0]["Address"].ToString();
-
+                        con.Close();
                         return View(j);
                     }
                     return View();
@@ -94,28 +83,42 @@ namespace AbaHussainWebSite.Controllers
             }
             else { return Redirect("Login"); }   
         }
+        public int[] getids()
+        {
+            int brow = 0;
+            int benrow = 0;
+            int[] arr=new int[2] { brow,benrow};
+            con.Open();
+            com = new SqlCommand("select * from Basics", con);
+            SqlDataReader dr = com.ExecuteReader();
+            DataTable dt = new DataTable();
+            dt.Load(dr);
+            
+            for (int t = 0; t < dt.Rows.Count; t++)
+            {
+                if (!String.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"])))
+                {
+                    brow = int.Parse(dt.Rows[t]["BasicID"].ToString());
+                    benrow = brow + 1;
+
+                }
+            }
+            con.Close();
+            arr[0] = brow;
+            arr[1] = benrow;
+            return arr;
+        }
         [HttpPost]
         public ActionResult Home(Basics bas, string addr)
         {
             try
             {
-
+                int[] r = new int[2];
+                r = getids();
+                int brow = r[0];
+                int benrow = r[1];
                 con.Open();
-                com = new SqlCommand("select * from Basics",con);
-                SqlDataReader dr = com.ExecuteReader();
-                DataTable dt = new DataTable();
-                dt.Load(dr);
-                int brow = 0;
-                int benrow = 0;
-                for (int t = 0; t < dt.Rows.Count; t++)
-                {
-                    if (!string.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"] )))
-                    {
-                        brow=int.Parse(dt.Rows[t]["BasicID"].ToString());
-                        benrow = brow + 1;
-
-                    }
-                }
+               
                 if (brow == 0 && benrow == 0)
                 {
                     com = new SqlCommand("insert into  Basics(email,Address,website,callus) Values ('" + bas.email + "',N'" + bas.Address + "','" + bas.website + "','" + bas.callus + "')", con);
@@ -134,7 +137,7 @@ namespace AbaHussainWebSite.Controllers
                     con.Close();
                     ViewBag.msg = "your Data Edited successfully";
                 }
-                return View();
+                 return Redirect("Home");
             }
             catch
             {
@@ -146,7 +149,43 @@ namespace AbaHussainWebSite.Controllers
         {
             if (Session["UserLog"] != null)
             {
-                return View();
+                try
+                {
+                    int[] ar = new int[2];
+                    ar = getids();
+                    int brow = ar[0];
+                    int benrow = ar[1];
+                    con.Open();
+                    if (brow != 0 && benrow != 0)
+                    {
+                        Basics j = new Basics();
+                        com = new SqlCommand("select * from Basics where BasicID=" + brow + " ", con);
+                        SqlCommand com1 = new SqlCommand("select * from Basics where BasicID=" + benrow + " ", con);
+                        SqlDataReader SqlDr = com.ExecuteReader();
+                        DataTable dtt = new DataTable();
+                        dtt.Load(SqlDr);
+
+                        SqlDataReader SqlDr1 = com1.ExecuteReader();
+                        DataTable dtt1 = new DataTable();
+                        dtt1.Load(SqlDr1);
+                        string enourServtxt, string headerMidtxt, string enParagMidtxt, string maintextNews, string mainImagText1, string mainImagText2, string parImgtxt, string midHeaderIndexPage, string midParaIndexPage
+                        j.headerMidtxt = dtt.Rows[0]["headerMidtxt"].ToString();
+                        j.ourServtxt = dtt.Rows[0]["ourServtxt"].ToString();
+                        j.ParagMidtxt = dtt.Rows[0]["ParagMidtxt"].ToString();
+                        j.maintextNews = dtt.Rows[0]["maintextNews"].ToString();
+                        j.mainImagText1 = dtt.Rows[0]["mainImagText1"].ToString();
+                        j.mainImagText2 = dtt.Rows[0]["mainImagText2"].ToString();
+                        j.midHeaderIndexPage = dtt.Rows[0]["midHeaderIndexPage"].ToString();
+                        j.midParaIndexPage = dtt.Rows[0]["midParaIndexPage"].ToString();
+                        j.parImgtxt = dtt.Rows[0]["parImgtxt"].ToString();
+                       
+                        ViewBag.addr = dtt1.Rows[0][""].ToString();
+                        con.Close();
+                        return View(j);
+                    }
+                    return View();
+                }
+                catch { return View(); }
             }
             else { return Redirect("Login"); }
         }
@@ -155,10 +194,17 @@ namespace AbaHussainWebSite.Controllers
         {
             try
             {
+                int[] r = new int[2];
+                r = getids();
+                int brow = r[0];
+                int benrow = r[1];
                 con.Open();
-                com = new SqlCommand("insert into  Basics(ourServtxt,headerMidtxt,ParagMidtxt,maintextNews,mainImagText1,mainImagText2,parImgtxt,midHeaderIndexPage,midParaIndexPage) Values (N'" + bas.ourServtxt + "',N'" + bas.headerMidtxt + "',N'" + bas.ParagMidtxt + "',N'" + bas.maintextNews + "',N'" + bas.mainImagText1 + "',N'" + bas.mainImagText2 + "',N'" + bas.parImgtxt + "',N'" + bas.midHeaderIndexPage + "',N'" + bas.midParaIndexPage + "')", con);
+                com = new SqlCommand("update  Basics set ourServtxt=N'" + bas.ourServtxt + "',headerMidtxt=N'" + bas.headerMidtxt + "',ParagMidtxt=N'" + bas.ParagMidtxt + "',maintextNews=N'" + bas.maintextNews + "',mainImagText1=N'" + bas.mainImagText1 + "',mainImagText2=N'" + bas.mainImagText2 + "',parImgtxt=N'" + bas.parImgtxt + "',midHeaderIndexPage=N'" + bas.midHeaderIndexPage + "',midParaIndexPage=N'" + bas.midParaIndexPage + "'where BasicID="+ brow, con);
+
+               // com = new SqlCommand("insert into  Basics(ourServtxt,headerMidtxt,ParagMidtxt,maintextNews,mainImagText1,mainImagText2,parImgtxt,midHeaderIndexPage,midParaIndexPage) Values (N'" + bas.ourServtxt + "',N'" + bas.headerMidtxt + "',N'" + bas.ParagMidtxt + "',N'" + bas.maintextNews + "',N'" + bas.mainImagText1 + "',N'" + bas.mainImagText2 + "',N'" + bas.parImgtxt + "',N'" + bas.midHeaderIndexPage + "',N'" + bas.midParaIndexPage + "')", con);
                 com.ExecuteNonQuery();
-                com = new SqlCommand("insert into  Basics(ourServtxt,headerMidtxt,ParagMidtxt,maintextNews,mainImagText1,mainImagText2,parImgtxt,midHeaderIndexPage,midParaIndexPage) Values ('" + enourServtxt + "','" + headerMidtxt + "','" + enParagMidtxt + "','" + maintextNews + "','" + mainImagText1 + "','" + mainImagText2 + "','" + parImgtxt + "','" + midHeaderIndexPage + "','" + midParaIndexPage + "')", con);
+                com = new SqlCommand("update  Basics set ourServtxt=N'" + enourServtxt + "',headerMidtxt='" + headerMidtxt + "',ParagMidtxt='" + enParagMidtxt + "',maintextNews='" + maintextNews + "',mainImagText1='" + mainImagText1 + "',mainImagText2='" + mainImagText2 + "',parImgtxt='" + parImgtxt + "',midHeaderIndexPage='" + midHeaderIndexPage + "',midParaIndexPage='" + midParaIndexPage + "'where BasicID=" + benrow, con);
+               // com = new SqlCommand enourServtxt + "','" + headerMidtxt + "','" + enParagMidtxt + "','" + maintextNews + "','" + mainImagText1 + "','" + mainImagText2 + "','" + parImgtxt + "','" + midHeaderIndexPage + "','" + midParaIndexPage + "')", con);
                 com.ExecuteNonQuery();
                 con.Close();
                 ViewBag.msg = "your Data inserted successfully";
