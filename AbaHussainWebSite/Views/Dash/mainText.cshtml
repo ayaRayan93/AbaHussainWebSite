@@ -35,7 +35,9 @@
                   
                     <div class="col-md-12">
                         <label class="control-label">  النص الرئيسي للخدمات بالعربي</label>
-                        <textarea name="ourServtxt" class="form-control" cols="7" rows="3"></textarea>
+                       @Html.TextAreaFor(m => m.ourServtxt, 3, 7, new { @class = "form-control" })
+                         @*<textarea name="ourServtxt" value='@Model.ourServtxt' class="form-control" cols="7" rows="3"></textarea>*@
+                            
                         @Html.ValidationMessageFor(model => model.ourServtxt, "", new { @class = "text-danger" })
                     </div>
 
@@ -43,11 +45,13 @@
                         <label class="control-label">النص الرئيسي للخدمات بالانجليزي</label>
                         @{ if (ViewBag.enourServtxt != null)
                             {
-                        <textarea name="enourServtxt"  value='@ViewBag.enourServtxt' class="form-control" cols="7" rows="3"></textarea>
+                                 @Html.TextArea("enourServtxt", (string)ViewBag.enourServtxt, 3, 7, new { @class = "form-control" })
                             }
                             else
                             {
-                            <textarea name="enourServtxt" class="form-control" cols="7" rows="3"></textarea>}
+                                @Html.TextArea("enourServtxt", (string)ViewBag.enourServtxt, 3, 7, new { @class = "form-control" })
+
+                            }
                         }
                         @Html.ValidationMessageFor(model => model.ourServtxt, "", new { @class = "text-danger" })
                     </div>

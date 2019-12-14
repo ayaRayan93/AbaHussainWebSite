@@ -145,7 +145,7 @@ namespace AbaHussainWebSite.Controllers
                 return View();
             }
         }
-        public ActionResult mainText()
+        public ActionResult mainText(string enourServtxt, string enheaderMidtxt, string enParagMidtxt, string enmaintextNews, string enmainImagText1, string enmainImagText2, string enparImgtxt, string enmidHeaderIndexPage, string enmidParaIndexPage)
         {
             if (Session["UserLog"] != null)
             {
@@ -200,8 +200,8 @@ namespace AbaHussainWebSite.Controllers
         [HttpPost]
         public ActionResult mainText(Basics bas, string enourServtxt, string enheaderMidtxt, string enParagMidtxt, string enmaintextNews, string enmainImagText1, string enmainImagText2, string enparImgtxt, string enmidHeaderIndexPage, string enmidParaIndexPage)
         {
-            //try
-            //{
+            try
+            {
                 int[] r = new int[2];
                 r = getids();
                 int brow = r[0];
@@ -218,12 +218,12 @@ namespace AbaHussainWebSite.Controllers
                     com.ExecuteNonQuery();
                     con.Close();
                     ViewBag.msg = "your Data updated successfully";
-                    return View();
+                    return Redirect("mainText");
                 }
                 else { ViewBag.Emsg = "برجاء ادخال معلومات الاتصال اولا"; return View(); }
                 
-            //}
-            //catch(Exception ex) { ViewBag.Emsg = "your Data didn't insert correctly"; return View(); }
+            }
+            catch(Exception ex) { ViewBag.Emsg = "your Data didn't insert correctly"; return View(); }
         }
         public ActionResult socialmedia()
         {if (Session["UserLog"] != null)
