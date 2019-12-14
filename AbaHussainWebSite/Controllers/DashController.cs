@@ -168,7 +168,7 @@ namespace AbaHussainWebSite.Controllers
                         SqlDataReader SqlDr1 = com1.ExecuteReader();
                         DataTable dtt1 = new DataTable();
                         dtt1.Load(SqlDr1);
-                        string enourServtxt, string headerMidtxt, string enParagMidtxt, string maintextNews, string mainImagText1, string mainImagText2, string parImgtxt, string midHeaderIndexPage, string midParaIndexPage
+                        //
                         j.headerMidtxt = dtt.Rows[0]["headerMidtxt"].ToString();
                         j.ourServtxt = dtt.Rows[0]["ourServtxt"].ToString();
                         j.ParagMidtxt = dtt.Rows[0]["ParagMidtxt"].ToString();
@@ -179,7 +179,15 @@ namespace AbaHussainWebSite.Controllers
                         j.midParaIndexPage = dtt.Rows[0]["midParaIndexPage"].ToString();
                         j.parImgtxt = dtt.Rows[0]["parImgtxt"].ToString();
                        
-                        ViewBag.addr = dtt1.Rows[0][""].ToString();
+                        ViewBag.enourServtxt = dtt1.Rows[0]["ourServtxt"].ToString();
+                        ViewBag.headerMidtxt = dtt1.Rows[0]["headerMidtxt"].ToString();
+                        ViewBag.enParagMidtxt = dtt1.Rows[0]["ParagMidtxt"].ToString();
+                        ViewBag.maintextNews = dtt1.Rows[0]["maintextNews"].ToString();
+                        ViewBag.mainImagText1 = dtt1.Rows[0]["mainImagText1"].ToString();
+                        ViewBag.mainImagText2 = dtt1.Rows[0]["mainImagText2"].ToString();
+                        ViewBag.parImgtxt = dtt1.Rows[0]["parImgtxt"].ToString();
+                        ViewBag.midHeaderIndexPage = dtt1.Rows[0]["midHeaderIndexPage"].ToString();
+                        ViewBag.midParaIndexPage = dtt1.Rows[0]["midParaIndexPage"].ToString();
                         con.Close();
                         return View(j);
                     }
@@ -190,27 +198,32 @@ namespace AbaHussainWebSite.Controllers
             else { return Redirect("Login"); }
         }
         [HttpPost]
-        public ActionResult mainText(Basics bas, string enourServtxt, string headerMidtxt, string enParagMidtxt, string maintextNews, string mainImagText1, string mainImagText2, string parImgtxt, string midHeaderIndexPage, string midParaIndexPage)
+        public ActionResult mainText(Basics bas, string enourServtxt, string enheaderMidtxt, string enParagMidtxt, string enmaintextNews, string enmainImagText1, string enmainImagText2, string enparImgtxt, string enmidHeaderIndexPage, string enmidParaIndexPage)
         {
-            try
-            {
+            //try
+            //{
                 int[] r = new int[2];
                 r = getids();
                 int brow = r[0];
                 int benrow = r[1];
-                con.Open();
-                com = new SqlCommand("update  Basics set ourServtxt=N'" + bas.ourServtxt + "',headerMidtxt=N'" + bas.headerMidtxt + "',ParagMidtxt=N'" + bas.ParagMidtxt + "',maintextNews=N'" + bas.maintextNews + "',mainImagText1=N'" + bas.mainImagText1 + "',mainImagText2=N'" + bas.mainImagText2 + "',parImgtxt=N'" + bas.parImgtxt + "',midHeaderIndexPage=N'" + bas.midHeaderIndexPage + "',midParaIndexPage=N'" + bas.midParaIndexPage + "'where BasicID="+ brow, con);
+                if (brow != 0 && benrow != 0)
+                {
+                    con.Open();
+                    com = new SqlCommand("update  Basics set ourServtxt=N'" + bas.ourServtxt + "',headerMidtxt=N'" + bas.headerMidtxt + "',ParagMidtxt=N'" + bas.ParagMidtxt + "',maintextNews=N'" + bas.maintextNews + "',mainImagText1=N'" + bas.mainImagText1 + "',mainImagText2=N'" + bas.mainImagText2 + "',parImgtxt=N'" + bas.parImgtxt + "',midHeaderIndexPage=N'" + bas.midHeaderIndexPage + "',midParaIndexPage=N'" + bas.midParaIndexPage + "'where BasicID=" + brow, con);
 
-               // com = new SqlCommand("insert into  Basics(ourServtxt,headerMidtxt,ParagMidtxt,maintextNews,mainImagText1,mainImagText2,parImgtxt,midHeaderIndexPage,midParaIndexPage) Values (N'" + bas.ourServtxt + "',N'" + bas.headerMidtxt + "',N'" + bas.ParagMidtxt + "',N'" + bas.maintextNews + "',N'" + bas.mainImagText1 + "',N'" + bas.mainImagText2 + "',N'" + bas.parImgtxt + "',N'" + bas.midHeaderIndexPage + "',N'" + bas.midParaIndexPage + "')", con);
-                com.ExecuteNonQuery();
-                com = new SqlCommand("update  Basics set ourServtxt=N'" + enourServtxt + "',headerMidtxt='" + headerMidtxt + "',ParagMidtxt='" + enParagMidtxt + "',maintextNews='" + maintextNews + "',mainImagText1='" + mainImagText1 + "',mainImagText2='" + mainImagText2 + "',parImgtxt='" + parImgtxt + "',midHeaderIndexPage='" + midHeaderIndexPage + "',midParaIndexPage='" + midParaIndexPage + "'where BasicID=" + benrow, con);
-               // com = new SqlCommand enourServtxt + "','" + headerMidtxt + "','" + enParagMidtxt + "','" + maintextNews + "','" + mainImagText1 + "','" + mainImagText2 + "','" + parImgtxt + "','" + midHeaderIndexPage + "','" + midParaIndexPage + "')", con);
-                com.ExecuteNonQuery();
-                con.Close();
-                ViewBag.msg = "your Data inserted successfully";
-                return View();
-            }
-            catch(Exception ex) { ViewBag.Emsg = "your Data didn't insert correctly"; return View(); }
+                    // com = new SqlCommand("insert into  Basics(ourServtxt,headerMidtxt,ParagMidtxt,maintextNews,mainImagText1,mainImagText2,parImgtxt,midHeaderIndexPage,midParaIndexPage) Values (N'" + bas.ourServtxt + "',N'" + bas.headerMidtxt + "',N'" + bas.ParagMidtxt + "',N'" + bas.maintextNews + "',N'" + bas.mainImagText1 + "',N'" + bas.mainImagText2 + "',N'" + bas.parImgtxt + "',N'" + bas.midHeaderIndexPage + "',N'" + bas.midParaIndexPage + "')", con);
+                    com.ExecuteNonQuery();
+                    com = new SqlCommand("update  Basics set ourServtxt=N'" + enourServtxt + "',headerMidtxt=N'" + enheaderMidtxt + "',ParagMidtxt=N'" + enParagMidtxt + "',maintextNews=N'" + enmaintextNews + "',mainImagText1=N'" + enmainImagText1 + "',mainImagText2=N'" + enmainImagText2 + "',parImgtxt=N'" + enparImgtxt + "',midHeaderIndexPage=N'" + enmidHeaderIndexPage + "',midParaIndexPage=N'" + enmidParaIndexPage + "' where BasicID=" + benrow, con);
+                    // com = new SqlCommand enourServtxt + "','" + headerMidtxt + "','" + enParagMidtxt + "','" + maintextNews + "','" + mainImagText1 + "','" + mainImagText2 + "','" + parImgtxt + "','" + midHeaderIndexPage + "','" + midParaIndexPage + "')", con);
+                    com.ExecuteNonQuery();
+                    con.Close();
+                    ViewBag.msg = "your Data updated successfully";
+                    return View();
+                }
+                else { ViewBag.Emsg = "برجاء ادخال معلومات الاتصال اولا"; return View(); }
+                
+            //}
+            //catch(Exception ex) { ViewBag.Emsg = "your Data didn't insert correctly"; return View(); }
         }
         public ActionResult socialmedia()
         {if (Session["UserLog"] != null)
