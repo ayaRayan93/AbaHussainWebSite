@@ -14,7 +14,7 @@ namespace AbaHussainWebSite.Controllers
     {
         SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
 
-        // SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=maindb;Integrated Security=True");
+         //SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussain;Integrated Security=True");
         SqlCommand com;
 
         // GET: Dash
@@ -331,8 +331,8 @@ namespace AbaHussainWebSite.Controllers
                 List.Add(new SocialMedia() { SocialID = 1, icon = "facebook" });
                 List.Add(new SocialMedia() { SocialID = 2, icon = "twitter" });
                 List.Add(new SocialMedia() { SocialID = 3, icon = "instagram" });
-               // List.Add(new SocialMedia() { SocialID = 4, icon = "whatsapp" });
-                ViewData["listSocial"] = new SelectList(List, "SocialID", "icon");
+                List.Add(new SocialMedia() { SocialID = 4, icon = "whatsapp" });
+                ViewBag.listSocial = new SelectList(List, "icon", "icon");
 
                 con.Close();
             }
@@ -462,7 +462,7 @@ namespace AbaHussainWebSite.Controllers
 
                     DDlsub();
                     if (ViewData["listsub"] != null)
-                    { return View(); }
+                    { return Redirect("products"); }
                     else { return View(ViewBag.Emsg); }
                 }
                 catch { ViewBag.Emsg = "a product didn't insert correctly"; return View(); }
@@ -625,7 +625,7 @@ namespace AbaHussainWebSite.Controllers
                     }
                     con.Close();
                     ViewBag.msg = "your data inserted successfully";
-                    return View();
+                    return Redirect("AllBranches");
                 }
                 catch(Exception ex)
                 {
@@ -890,7 +890,9 @@ namespace AbaHussainWebSite.Controllers
             {
                 try
                 {
+                    DDlSevices();
                     con.Open();
+                   
                     SubCategory j = new SubCategory();
                     com = new SqlCommand("select * from SubCategory where SubCategoryID=" + id + " ", con);
                     SqlDataReader SqlDr = com.ExecuteReader();
@@ -899,7 +901,7 @@ namespace AbaHussainWebSite.Controllers
                     j.SubCategoryID = int.Parse(dt.Rows[0]["SubCategoryID"].ToString());
                     j.SubCateName = dt.Rows[0]["SubCateName"].ToString();
                     j.enSubName = dt.Rows[0]["enSubName"].ToString();
-                    DDlSevices();
+                   j.FKServID= int.Parse(dt.Rows[0]["FKServID"].ToString());
                     con.Close();
                     return View(j);
                 }
@@ -911,12 +913,13 @@ namespace AbaHussainWebSite.Controllers
         public ActionResult Editsubcate(SubCategory sub)
         { try
                 {
-                   
-                    con.Open();
-                    com = new SqlCommand("update SubCategory set SubCateName=N'" + sub.SubCateName + "',enSubName=N'" + sub.enSubName + "' where SubCategoryID=" + sub.SubCategoryID, con);
+                DDlSevices();
+                con.Open();
+               
+                com = new SqlCommand("update SubCategory set SubCateName=N'" + sub.SubCateName + "',enSubName=N'" + sub.enSubName + "' where SubCategoryID=" + sub.SubCategoryID, con);
                     com.ExecuteNonQuery();
                     con.Close();
-                    DDlSevices();
+                   
                     return RedirectToAction("subcategory");
                 }
 
@@ -947,7 +950,7 @@ namespace AbaHussainWebSite.Controllers
                     j.enText = dt.Rows[0]["enText"].ToString();
                     j.Price = decimal.Parse(dt.Rows[0]["Price"].ToString());
                     j.img = dt.Rows[0]["img"].ToString();
-
+j.FKSubID = int.Parse(dt.Rows[0]["FKSubID"].ToString());
                     con.Close();
                     return View(j);
                 }

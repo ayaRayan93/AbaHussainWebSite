@@ -41,13 +41,14 @@
                         @Html.ActionLink("تفاصيل", "Details", new { id = Model.Rows[i]["BID"] }) 
                     
                 </td>
-                <td><div id="remove"> <a id="@Model.Rows[i]["BID"]" href="javascript:;">حذف</a></div></td>
+                <td><div id="remove"> <a id="@Model.Rows[i]["BID"]" href="#">حذف</a></div></td>
             </tr>
         }
 
     </table>
-   </div>
-     <script>
+   </div><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script>
 
 
       $(document).ready(function ()
@@ -65,7 +66,7 @@
                    url: '/Deleting/Deletebranch/id',
                    data: { id: id },
                    success: function () {
-                       $("#row_" + id).remove();
+                       $("#row_"+ id).remove;
                    },
                    error: function () {
 
@@ -75,4 +76,4 @@
        })
    });
 
-    </script>
+</script>

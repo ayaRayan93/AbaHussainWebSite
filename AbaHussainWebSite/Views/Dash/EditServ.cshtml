@@ -4,7 +4,20 @@
     ViewBag.Title = "الخدمات";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
+<script type="text/javascript">
+// function to show image when he choose one
+   function show(input) {
+      if (input.files && input.files[0]) {
+      var filerdr = new FileReader();
+      filerdr.onload = function (e) {
+         $('#ii').attr('src', e.target.result);
+      }
+      filerdr.readAsDataURL(input.files[0]);
+   }
+   }
 
+
+</script>
 <h2 style="text-align:right">تعديل</h2>
 
 @using (Html.BeginForm("EditServ", "Dash", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -20,7 +33,9 @@
                 <label class="control-label ">
                     صورة الخدمة
                 </label>
-                <input type="file" name="imgfile" class="form-control" />
+                @{if (Model.img != null)
+                    { <img src="@Url.Content(Model.img)" width="100px" height="100px" id="ii" />}}
+                <input type="file" name="imgfile" class="form-control" onchange="show(this)"/>
                 @Html.ValidationMessageFor(model => model.img, "", new { @class = "text-danger" })
             </div>
 

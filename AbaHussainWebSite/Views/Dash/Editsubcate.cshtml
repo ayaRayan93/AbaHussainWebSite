@@ -1,61 +1,58 @@
-﻿@model AbaHussainWebSite.Models.SubCategory
+﻿
+@model AbaHussainWebSite.Models.SubCategory
 
 @{
-    ViewBag.Title = "التصنيفات الفرعيه";
+    ViewBag.Title = "التصنيفات الفرعية";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
 
-<h2 style="text-align:right">تعديل</h2>
+@{ if (ViewBag.listServ != null)
+    {
+        <h2 style="text-align:right">تعديل تصنيف فرعي</h2>
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <div class="" dir="rtl" style="margin:auto auto; text-align:right;width:600px">
-            <p style="color:red">@ViewBag.Emsg</p>
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.SubCategoryID)
+            <div class="" dir="rtl" style="margin:auto auto; text-align:right;width:600px">
+                <p style="color:red">@ViewBag.Emsg</p>
 
-            <div class="form-group">
-                   <div class="col-md-12">
-                       <label class="control-label ">
-                          اسم التصنيف بالعربي
-                       </label>
-                    @Html.EditorFor(model => model.SubCateName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.SubCateName, "", new { @class = "text-danger" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label>خدمة</label>
+                        @Html.DropDownListFor(m => m.FKServID, ViewBag.listServ as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.FKServID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12" dir="rtl">
+                        <label> اسم التصنيف بالعربي</label>
+                        @Html.EditorFor(model => model.SubCateName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SubCateName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label>اسم التصنيف بالانجليزي</label>
+                        @Html.EditorFor(model => model.enSubName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.enSubName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="submit" value="تعديل" class="btn btn-primary" />
+                    </div>
                 </div>
             </div>
+        }
+        Html.RenderAction("_subcat", "Dash");
+    }
 
-            <div class="form-group">
-                 <div class="col-md-12">
-                     <label class="control-label ">
-                         اسم التصنيف بالانجليزي
-                     </label>
-                    @Html.EditorFor(model => model.enSubName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.enSubName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-12">
-                    @Html.DropDownListFor(m => m.FKServID, ViewBag.listServ as IEnumerable<SelectListItem>, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.FKServID, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
-            </div>
-        </div>
-     </div>
+    else
+    { <h4 style="color:red;text-align:center"> برجاء ادخال خدمة اولا </h4>}
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
