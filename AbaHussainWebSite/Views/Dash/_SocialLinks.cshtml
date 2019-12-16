@@ -30,7 +30,7 @@
                     @Html.DisplayFor(modelItem => Model.Rows[i]["link"])
                 </td>
                 <td>
-                    @Html.ActionLink("تعديل", "Edit", "Dash", new { id= Model.Rows[i]["SocialID"] }) 
+                    @Html.ActionLink("تعديل", "Edit", "Dash", new { id= Model.Rows[i]["SocialID"] }, new { @class = "text-primary" }) 
                     </td>
                     <td>
 

@@ -648,6 +648,7 @@
     <Content Include="Views\Home\_news.cshtml" />
     <Content Include="Views\Home\_Enews.cshtml" />
     <Content Include="Views\Shared\_social.cshtml" />
+    <Content Include="Views\Dash\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -258,6 +258,56 @@ namespace AbaHussainWebSite.Controllers
                 ViewBag.Emsg = "Error Ocurred"; return View();
             }
         }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            if (Session["UserLog"] != null)
+            {
+                try
+                {
+                    DDLSocialMedia();
+                    con.Open();
+
+                    SocialMedia j = new SocialMedia();
+                    com = new SqlCommand("select * from SocialMedia where SocialID=" + id + " ", con);
+                    SqlDataReader SqlDr = com.ExecuteReader();
+                    DataTable dt = new DataTable();
+                    dt.Load(SqlDr);
+                    j.SocialID = int.Parse(dt.Rows[0]["SocialID"].ToString());
+                    j.icon = dt.Rows[0]["icon"].ToString();
+                    j.link = dt.Rows[0]["link"].ToString();
+                   
+                    con.Close();
+                    return View(j);
+                }
+                catch { ViewBag.Emsg = "Error occured"; return View(); };
+            }
+            else return Redirect("Login");
+        }
+        [HttpPost]
+        public ActionResult Edit(SocialMedia so)
+        {
+            try
+            {
+                DDLSocialMedia();
+                con.Open();
+
+                com = new SqlCommand("update SocialMedia set icon=N'" + so.icon + "',link=N'" + so.link + "' where SocialID=" + so.SocialID, con);
+                com.ExecuteNonQuery();
+                con.Close();
+
+                return RedirectToAction("socialmedia");
+            }
+
+            catch
+            {
+                ViewBag.Emsg = "فشل التعديل";
+                return View();
+            }
+
+        }
+
         public PartialViewResult _SocialLinks()
         {
             con.Open();
@@ -917,8 +967,8 @@ namespace AbaHussainWebSite.Controllers
                 con.Open();
                
                 com = new SqlCommand("update SubCategory set SubCateName=N'" + sub.SubCateName + "',enSubName=N'" + sub.enSubName + "' where SubCategoryID=" + sub.SubCategoryID, con);
-                    com.ExecuteNonQuery();
-                    con.Close();
+                 com.ExecuteNonQuery();
+                 con.Close();
                    
                     return RedirectToAction("subcategory");
                 }
