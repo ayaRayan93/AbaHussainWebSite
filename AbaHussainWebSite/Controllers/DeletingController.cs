@@ -9,7 +9,9 @@ namespace AbaHussainWebSite.Controllers
 {
     public class DeletingController : Controller
     {
-        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial catalog=hamdymor_abahussain;Integrated Security=True");
+        SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
+
+        //SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial catalog=hamdymor_abahussain;Integrated Security=True");
         SqlCommand com;
         // GET: Deleting
         public ActionResult Index()
@@ -18,17 +20,16 @@ namespace AbaHussainWebSite.Controllers
         }
 
         [HttpPost]
-        public void DeleteSocial(int id)
+        public ActionResult DeleteSocial(int id)
         {
-            try
-            {
+            
                 con.Open();
           
                 com = new SqlCommand("delete from SocialMedia where SocialID=" + id, con);
                 com.ExecuteNonQuery();
                 con.Close();
-            }
-            catch { }
+                return Json(true, JsonRequestBehavior.AllowGet);
+            
 
         }
         [HttpPost]
@@ -48,8 +49,8 @@ namespace AbaHussainWebSite.Controllers
         [HttpPost]
         public void Deleteserv(int id)
         {
-            try
-            {
+           // try
+           // {
                 con.Open();
                 //com = new SqlCommand("delete from Products join SubCategory on FKSubID=SubCategoryID where SubCategory.FKServID="+id, con);
                 //com.ExecuteNonQuery();
@@ -58,8 +59,8 @@ namespace AbaHussainWebSite.Controllers
                 com = new SqlCommand("delete from Services where ServicesID=" + id, con);
                 com.ExecuteNonQuery();
                 con.Close();
-            }
-            catch { }
+           // }
+            //catch { }
 
         }
 
@@ -87,6 +88,7 @@ namespace AbaHussainWebSite.Controllers
                 com = new SqlCommand("delete from Products where ProductID=" + id, con);
                 com.ExecuteNonQuery();
                 con.Close();
+              
             }
             catch { }
 
@@ -98,7 +100,7 @@ namespace AbaHussainWebSite.Controllers
             try
             {
                 con.Open();
-                com = new SqlCommand("delete from BranchDetail where FKBrancheID=" + id, con);
+                com = new SqlCommand("delete from BranchDetail where FKBranchID=" + id, con);
                 com.ExecuteNonQuery();
                 com = new SqlCommand("delete from Branches where BID=" + id, con);
                 com.ExecuteNonQuery();
