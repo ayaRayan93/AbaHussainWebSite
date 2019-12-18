@@ -199,9 +199,9 @@ namespace AbaHussainWebSite.Controllers
                                              select e);
             return View(Branches);
         }
-        SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
+       // SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
 
-       // SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussain;Integrated Security=True");
+        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussain;Persist Security Info=True;");
         SqlCommand com;
         [HttpGet]
         public ActionResult Details(int id)
@@ -398,22 +398,10 @@ namespace AbaHussainWebSite.Controllers
         //}
         public PartialViewResult DisplayProduct()
         {
-            //Basics basic = (from e in db.Basics
-            //                select e).First();
-            //ViewBag.email = basic.email;
-            //ViewBag.callus = basic.callus;
-            //ViewBag.parImgtxt = basic.parImgtxt;
-
-            //IEnumerable<Services> Service = (from e in db.Services
-            //                                 select e);
-            //string s = "";
-            //foreach (Services item in Service)
-            //{
-            //    s += item.Name + ",";
-            //}
-            //ViewBag.service = s;
+          
             SubCategory SubCategory = (from e in db.SubCategory
                                             select e).First();
+            con.Close();
             con.Open();
             com = new SqlCommand("select * from Products where FKSubID=" + SubCategory.SubCategoryID, con);
             SqlDataReader SqlDr = com.ExecuteReader();

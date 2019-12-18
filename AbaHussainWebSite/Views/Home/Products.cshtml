@@ -16,7 +16,7 @@
                                     string[] arr = str.Split(',');
                                     for (int i = 0; i < arr.Length - 1; i++)
                                     {
-                                        <li>@Html.ActionLink(arr[i]+" ", "GetProducts", "Home",new { Service_Name= arr[i] },null)</li>
+                                        <li>@Html.ActionLink(arr[i] + " ", "GetProducts", "Home", new { Service_Name = arr[i] }, null)</li>
                                     }
                                 }
                             </ul>
@@ -34,22 +34,17 @@
                                    
                                 </div>
                                     <div class="col-12">
-                                       <select class="browser-default custom-select" onchange="select_onchange();" id="selTab">
+                                       @*<select class="browser-default custom-select" onchange="select_onchange();" id="selTab">
                                             <option selected value="x">الاقسام الداخلية</option>
                                             @foreach (var item in Model)
                                             {
                                              <option value="@Html.DisplayFor(m => item.SubCategoryID)"> 
-                                                 @*@Html.ActionLink(item.SubCateName, "DisplayProduct", "Home", new { id = item.SubCategoryID }, new { @class = "text-primary" })*@
-                                                 <ul class="sidebar_categories">
-
-                                                         <li>@Html.ActionLink(item.SubCateName, "DisplayProduct", "Home", new { id = item.SubCategoryID }, new { @class = "text-primary" })</li>
-                                                     
-
-                                                 </ul>
+                                                 @Html.ActionLink(item.SubCateName, "DisplayProduct", "Home", new { id = item.SubCategoryID }, new { @class = "text-primary" })
+                                          
                                              </option>
                                             }
-                                        </select>
-                                        @*<ul class="sidebar_categories">
+                                        </select>*@
+                                        @*<ul class="navbar-nav">
                                             
                                                 @foreach (var item in Model)
                                                 {
@@ -57,6 +52,27 @@
                                                 }
                                             
                                         </ul>*@
+                                        @{ 
+                                            List<SelectListItem> list = new List<SelectListItem>();
+                                            foreach (var item in Model)
+                                            {
+                                                SelectListItem i = new SelectListItem();
+                                                i.Text = item.SubCateName;
+                                                i.Value = item.SubCategoryID.ToString();
+                                                list.Add(i);
+                                            }
+                                        
+                                        using (Html.BeginForm("DisplayProduct", "Home", FormMethod.Post, new { id = "TheForm" }))
+                                        {
+
+                                            @Html.DropDownList("CategoryID", (IEnumerable<SelectListItem>)list , "--Select One--",
+    new
+    {
+        onchange = "document.getElementById('TheForm').submit();"
+    })
+
+                                        }
+                                        }
                                     </div>
                                 </div>
                             <div class="row"  style="margin-top:10px">
@@ -77,25 +93,13 @@
 
         </div>
 
+
+
 <script type="text/javascript">
-
-
-        $(function () {
-            var val = $("#selTab").val().split("$");
-            setTab(val[0]);
-            $("#lblTypeValue").text(val[1]);
-        });
-
-        function setTab(value) {
-            $('#myTabs a[href="#tab' + value + 'default"]').tab('show');
-        }
-
-        function select_onchange(sel) {
-            var val = sel.value.split("$");
-            setTab(val[0]);
-            $("#lblTypeValue").text(val[1]);
-        }
+  $(function() {
+    $("#CategoryID").change(function() {
+      $('#TheForm').submit();
+    });
+  });
 
 </script>
-
-
