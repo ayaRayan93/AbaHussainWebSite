@@ -12,9 +12,9 @@ namespace AbaHussainWebSite.Controllers
 {
     public class DashController : Controller
     {
-       // SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
+         SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-CQI3I4K\MYSQLSERVER;Initial Catalog=maindb;Integrated Security=True");
 
-        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=maindb;Integrated Security=True");
+        //SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussain;Persist Security Info=True;");
         SqlCommand com;
 
         // GET: Dash
@@ -594,15 +594,16 @@ namespace AbaHussainWebSite.Controllers
                     file.SaveAs(Server.MapPath("~/imgs/" + file.FileName));
                     serv.img = "~/imgs/" + file.FileName;
                     con.Open();
+                    string q = "insert into  Services Values (N'" + serv.Name + "',N'" + serv.textServe + "',N'" + serv.img + "','" + serv.enName + "','" + serv.entxtServe + "')";
                     com = new SqlCommand("insert into  Services Values (N'" + serv.Name + "',N'" + serv.textServe + "',N'" + serv.img + "','" + serv.enName + "','" + serv.entxtServe + "')", con);
                     com.ExecuteNonQuery();
                     con.Close();
 
                     return View();
                 }
-                catch
+                catch(Exception ex)
                 {
-                    ViewBag.Emsg = "your services didn't insert correctly"; return View();
+                    ViewBag.Emsg = "your services didn't insert correctly"+ex.Message; return View();
                 }
 
             else

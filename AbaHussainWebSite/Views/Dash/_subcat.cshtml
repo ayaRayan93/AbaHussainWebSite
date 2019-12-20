@@ -29,7 +29,7 @@
                     @Html.DisplayFor(modelItem => Model.Rows[i]["enSubName"])
                 </td>
                 <td>
-                    @{ System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
+                    @{ System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(@"Data Source=DESKTOP-CQI3I4K\MYSQLSERVER;Initial Catalog=maindb;Integrated Security=True");
                         //System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial catalog=hamdymor_abahussain;Integrated Security=True");
                         con.Open();
                         System.Data.SqlClient.SqlCommand com = new System.Data.SqlClient.SqlCommand("select * from Services where ServicesID="+int.Parse(Model.Rows[i]["FKServID"].ToString()), con);

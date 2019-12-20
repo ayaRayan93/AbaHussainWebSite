@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AbaHussainWebSite.Models.SubCategory>
+﻿@model System.Data.DataTable
         <div class="fs_menu_overlay"></div>
         <!-- Hamburger Menu -->
         <div class="container">
@@ -16,7 +16,7 @@
                                     string[] arr = str.Split(',');
                                     for (int i = 0; i < arr.Length - 1; i++)
                                     {
-                                        <li>@Html.ActionLink(arr[i] + " ", "GetProducts", "Home", new { Service_Name = arr[i] }, null)</li>
+                                        <li>@Html.ActionLink(arr[i] + " ", "GetProducts", "Home", new { Service_Name = arr[i] ,subcat=""}, null)</li>
                                     }
                                 }
                             </ul>
@@ -34,44 +34,30 @@
                                    
                                 </div>
                                     <div class="col-12">
-                                       @*<select class="browser-default custom-select" onchange="select_onchange();" id="selTab">
-                                            <option selected value="x">الاقسام الداخلية</option>
-                                            @foreach (var item in Model)
-                                            {
-                                             <option value="@Html.DisplayFor(m => item.SubCategoryID)"> 
-                                                 @Html.ActionLink(item.SubCateName, "DisplayProduct", "Home", new { id = item.SubCategoryID }, new { @class = "text-primary" })
-                                          
-                                             </option>
-                                            }
-                                        </select>*@
-                                        @*<ul class="navbar-nav">
-                                            
-                                                @foreach (var item in Model)
-                                                {
-                                                    <li>@Html.ActionLink(item.SubCateName, "DisplayProduct", "Home", new { id = item.SubCategoryID }, new { @class = "text-primary" })</li>
-                                                }
-                                            
-                                        </ul>*@
+                                    
                                         @{ 
                                             List<SelectListItem> list = new List<SelectListItem>();
-                                            foreach (var item in Model)
+                                            string str1 = ViewBag.SubCategory;
+                                            string[] arr1 = str1.Split(',');
+                                            for (int i = 0; i < arr1.Length ; i++)
                                             {
-                                                SelectListItem i = new SelectListItem();
-                                                i.Text = item.SubCateName;
-                                                i.Value = item.SubCategoryID.ToString();
-                                                list.Add(i);
+
+                                                SelectListItem item = new SelectListItem();
+                                                item.Text = arr1[i];
+                                                list.Add(item);
                                             }
-                                        
-                                        using (Html.BeginForm("DisplayProduct", "Home", FormMethod.Post, new { id = "TheForm" }))
-                                        {
+                                       
 
-                                            @Html.DropDownList("CategoryID", (IEnumerable<SelectListItem>)list , "--Select One--",
-    new
-    {
-        onchange = "document.getElementById('TheForm').submit();"
-    })
+                                            using (Html.BeginForm("GetProducts", "Home", FormMethod.Get, new { id = "TheForm" }))
+                                            {
 
-                                        }
+                                            @Html.DropDownList("CategoryID", (IEnumerable<SelectListItem>)list,
+                                                           new Dictionary<string, object>
+                                                           {
+                                                               { "class" , "browser-default custom-select" },
+                                                               {  "onchange" , "document.getElementById('TheForm').submit();" }
+                                                           })
+                                            }
                                         }
                                     </div>
                                 </div>
@@ -79,9 +65,32 @@
                                 <div class="col">
                                     <!-- Product Grid -->
                                     <div class="container" style="clear: right;">
-                             @{Html.RenderAction("DisplayProduct", "Home");
-                            }
-                                  
+                                        <div class="row">
+                                            <!-- Product 1 -->
+                                            @for (int i = 0; i < Model.Rows.Count; i++)
+                                            {
+
+                                                <div class="col-sm">
+                                                    <div class="product discount product_filter">
+                                                        <div class="product_image">
+                                                            <img src="~/images/branches/branch1/b1.jpeg" width="180px" height="180px" alt="">
+                                                        </div>
+                                                        <div class="favorite favorite_left"></div>
+
+                                                        <div class="product_info">
+                                                            <h6 class="product_name">
+                                                                <a href="single.html">
+                                                                    @Html.DisplayFor(modelItem => Model.Rows[i]["Text"])
+                                                                </a>
+                                                            </h6>
+                                                            <div class="product_price">@Html.DisplayFor(modelItem => Model.Rows[i]["Price"])</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            }
+                                        </div>
                                     </div>
 
                                 </div>

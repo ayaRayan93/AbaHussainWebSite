@@ -199,9 +199,9 @@ namespace AbaHussainWebSite.Controllers
                                              select e);
             return View(Branches);
         }
-       // SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
+        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-CQI3I4K\MYSQLSERVER;Initial Catalog=maindb;Integrated Security=True");
 
-        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussain;Persist Security Info=True;");
+      //  SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussain;Persist Security Info=True;");
         SqlCommand com;
         [HttpGet]
         public ActionResult Details(int id)
@@ -315,22 +315,43 @@ namespace AbaHussainWebSite.Controllers
                 s += item.Name + ",";
             }
             ViewBag.service = s;
-            IEnumerable<SubCategory> SubCategory1 = (from e in db.SubCategory
-                                                     where e.SubCategoryID == 1
-                                                     select e);
-            foreach (SubCategory item in SubCategory1)
+            Services Servicea = (from e in db.Services
+                                 select e).First();
+
+            IEnumerable<SubCategory> SubCategorylist = (from e in db.SubCategory
+                                                        where e.FKServID == Servicea.ServicesID
+                                                        select e);
+        
+            string sub = "";
+            foreach (SubCategory item in SubCategorylist)
             {
-                IEnumerable<Products> ProductsList = (from e in db.Products
-                                                      where e.FKSubID == item.SubCategoryID
-                                                      select e);
-                item.Products = ProductsList;
+                sub += item.SubCateName + ",";
             }
-            return View(SubCategory1);
+            ViewBag.SubCategory = sub;
+
+            SubCategory SubCategory = (from e in db.SubCategory
+                               where e.FKServID == Servicea.ServicesID
+                               select e).First();
+            
+
+            IEnumerable<Products> ProductsList = (from e in db.Products
+                                                  where e.FKSubID == SubCategory.SubCategoryID
+                                                  select e);
+            con.Close();
+            con.Open();
+            com = new SqlCommand("select * from Products where FKSubID=" + SubCategory.SubCategoryID, con);
+            SqlDataReader SqlDr = com.ExecuteReader();
+            DataTable d = new DataTable();
+            d.Load(SqlDr);
+
+            ViewBag.cunt = d.Rows.Count;
+            con.Close();
+            return View(d);
         }
         [HttpGet]
-        public ActionResult GetProducts(string service_Name)
+        public ActionResult GetProducts(string service_Name,string CategoryID)
         {
-
+        //   string dd= RouteData.Values["CategoryID"].ToString();
             Basics basic = (from e in db.Basics
                             select e).First();
             ViewBag.email = basic.email;
@@ -347,72 +368,57 @@ namespace AbaHussainWebSite.Controllers
                 s += item.Name + ",";
             }
             ViewBag.service = s;
+            Services Servicea;
+            SubCategory SubCategory1;
 
-            Services Servicea = (from e in db.Services 
-                                where e.Name==service_Name
-                                select e ).First();
-            IEnumerable<SubCategory> SubCategory1 = (from e in db.SubCategory
-                                                    where e.FKServID==Servicea.ServicesID
-                                                    select e);
-            foreach (SubCategory item in SubCategory1)
+            if (service_Name == null && CategoryID != null)
             {
-                IEnumerable<Products> ProductsList = (from e in db.Products
-                                                  where e.FKSubID == item.SubCategoryID
-                                                      select e);
-                item.Products = ProductsList;
-            }
-            return View("~/Views/Home/Products.cshtml", SubCategory1);
-        }
-        //[HttpGet]
-        //public PartialViewResult DisplayProduct(int id)
-        //{
-        //    //Basics basic = (from e in db.Basics
-        //    //                select e).First();
-        //    //ViewBag.email = basic.email;
-        //    //ViewBag.callus = basic.callus;
-        //    //ViewBag.parImgtxt = basic.parImgtxt;
-
-        //    //IEnumerable<Services> Service = (from e in db.Services
-        //    //                                 select e);
-        //    //string s = "";
-        //    //foreach (Services item in Service)
-        //    //{
-        //    //    s += item.Name + ",";
-        //    //}
-        //    //ViewBag.service = s;
-        //    if (id == null)
-        //    {
-        //        id = 5;
-        //    }
-        //    con.Open();
-        //    com = new SqlCommand("select * from Products where FKSubID=" + id, con);
-        //    SqlDataReader SqlDr = com.ExecuteReader();
-        //    DataTable d = new DataTable();
-        //    d.Load(SqlDr);
-
-        //    ViewBag.cunt = d.Rows.Count;
-        //    con.Close();
-        //    return PartialView("DisplayProduct", d);
-
-
-        //}
-        public PartialViewResult DisplayProduct()
-        {
-          
-            SubCategory SubCategory = (from e in db.SubCategory
+                SubCategory1 = (from e in db.SubCategory
+                                            where e.SubCateName == CategoryID
                                             select e).First();
+                Servicea = (from e in db.Services
+                            where e.ServicesID == SubCategory1.FKServID
+                            select e).First();
+            }
+            else
+            {
+                Servicea = (from e in db.Services
+                                     where e.Name == service_Name
+                                     select e).First();
+                SubCategory1 = (from e in db.SubCategory
+                                where e.FKServID == Servicea.ServicesID
+                                select e).First();
+            }
+            IEnumerable<SubCategory> SubCategorylist = (from e in db.SubCategory
+                                                        where e.FKServID==Servicea.ServicesID
+                                                         select e);
+       
+            string sub = "";
+            foreach (SubCategory item in SubCategorylist)
+            {
+                sub += item.SubCateName + ",";
+            }
+            ViewBag.SubCategory = sub;
+          
+          
+            
+       
+            IEnumerable<Products> ProductsList = (from e in db.Products
+                                                where e.FKSubID == SubCategory1.SubCategoryID
+                                                    select e);
             con.Close();
             con.Open();
-            com = new SqlCommand("select * from Products where FKSubID=" + SubCategory.SubCategoryID, con);
+            com = new SqlCommand("select * from Products where FKSubID=" + SubCategory1.SubCategoryID, con);
             SqlDataReader SqlDr = com.ExecuteReader();
             DataTable d = new DataTable();
             d.Load(SqlDr);
 
             ViewBag.cunt = d.Rows.Count;
             con.Close();
-            return PartialView("DisplayProduct", d);
 
+            return View("~/Views/Home/Products.cshtml", d);
         }
+    
         public ActionResult E_Products()
         {
             Basics basic = (from e in db.Basics
@@ -422,6 +428,9 @@ namespace AbaHussainWebSite.Controllers
             ViewBag.callus = basic.callus;
             ViewBag.parImgtxt = basic.parImgtxt;
 
+            IEnumerable<SocialMedia> SocialMedialist = (from e in db.SocialMedia
+                                                        select e);
+            ViewData["listSocial"] = SocialMedialist;
             IEnumerable<Services> Service = (from e in db.Services
                                              select e);
             string s = "";
@@ -430,7 +439,110 @@ namespace AbaHussainWebSite.Controllers
                 s += item.enName + ",";
             }
             ViewBag.service = s;
-            return View();
+            Services Servicea = (from e in db.Services
+                                 select e).First();
+
+            IEnumerable<SubCategory> SubCategorylist = (from e in db.SubCategory
+                                                        where e.FKServID == Servicea.ServicesID
+                                                        select e);
+
+            string sub = "";
+            foreach (SubCategory item in SubCategorylist)
+            {
+                sub += item.enSubName + ",";
+            }
+            ViewBag.SubCategory = sub;
+
+            SubCategory SubCategory = (from e in db.SubCategory
+                                       where e.FKServID == Servicea.ServicesID
+                                       select e).First();
+
+
+            IEnumerable<Products> ProductsList = (from e in db.Products
+                                                  where e.FKSubID == SubCategory.SubCategoryID
+                                                  select e);
+            con.Close();
+            con.Open();
+            com = new SqlCommand("select * from Products where FKSubID=" + SubCategory.SubCategoryID, con);
+            SqlDataReader SqlDr = com.ExecuteReader();
+            DataTable d = new DataTable();
+            d.Load(SqlDr);
+
+            ViewBag.cunt = d.Rows.Count;
+            con.Close();
+            return View(d);
         }
+        [HttpGet]
+        public ActionResult E_GetProducts(string service_Name, string CategoryID)
+        {
+            Basics basic = (from e in db.Basics
+                            select e).OrderByDescending(e => e.BasicID)
+                   .FirstOrDefault();
+
+            ViewBag.email = basic.email;
+            ViewBag.callus = basic.callus;
+            ViewBag.parImgtxt = basic.parImgtxt;
+            IEnumerable<SocialMedia> SocialMedialist = (from e in db.SocialMedia
+                                                        select e);
+            ViewData["listSocial"] = SocialMedialist;
+            IEnumerable<Services> Service = (from e in db.Services
+                                             select e);
+            string s = "";
+            foreach (Services item in Service)
+            {
+                s += item.enName + ",";
+            }
+            ViewBag.service = s;
+            Services Servicea;
+            SubCategory SubCategory1;
+
+            if (service_Name == null && CategoryID != null)
+            {
+                SubCategory1 = (from e in db.SubCategory
+                                where e.enSubName == CategoryID
+                                select e).First();
+                Servicea = (from e in db.Services
+                            where e.ServicesID == SubCategory1.FKServID
+                            select e).First();
+            }
+            else
+            {
+                Servicea = (from e in db.Services
+                            where e.enName == service_Name
+                            select e).First();
+                SubCategory1 = (from e in db.SubCategory
+                                where e.FKServID == Servicea.ServicesID
+                                select e).First();
+            }
+            IEnumerable<SubCategory> SubCategorylist = (from e in db.SubCategory
+                                                        where e.FKServID == Servicea.ServicesID
+                                                        select e);
+
+            string sub = "";
+            foreach (SubCategory item in SubCategorylist)
+            {
+                sub += item.enSubName + ",";
+            }
+            ViewBag.SubCategory = sub;
+
+
+
+
+            IEnumerable<Products> ProductsList = (from e in db.Products
+                                                  where e.FKSubID == SubCategory1.SubCategoryID
+                                                  select e);
+            con.Close();
+            con.Open();
+            com = new SqlCommand("select * from Products where FKSubID=" + SubCategory1.SubCategoryID, con);
+            SqlDataReader SqlDr = com.ExecuteReader();
+            DataTable d = new DataTable();
+            d.Load(SqlDr);
+
+            ViewBag.cunt = d.Rows.Count;
+            con.Close();
+
+            return View("~/Views/Home/E_Products.cshtml", d);
+        }
+
     }
 }

@@ -21,6 +21,7 @@ namespace AbaHussainWebSite.Models
         public int FKSubID { get; set; }
         public string enText { get; set; }
     
+
         public virtual SubCategory SubCategory { get; set; }
     }
 }

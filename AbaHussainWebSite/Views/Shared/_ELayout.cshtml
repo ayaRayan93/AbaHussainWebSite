@@ -45,7 +45,6 @@
                             </div>
                         </div>
                         <div class="col-md d-flex topper align-items-center align-items-stretch py-md-4">
-                            <div class="icon d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
                             <div class="text d-flex align-items-center">
                                 <a href="https://pay.abahussain.co" style="margin-left: 3%;color:white">Pay Now</a>
                                 <div class="icon d-flex justify-content-center align-items-center"><span class="icon-money"></span></div>
@@ -94,9 +93,8 @@
             <div class="ftco-footer-widget mb-5">
               <h2 class="ftco-heading-2 logo"><image src="~/images/logo.png" width="50px" height="50px" class="mr-1"/>Aba Hussain</h2>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
-                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                 @{Html.RenderAction("_social", "Home");
+                }
               </ul>
             </div>
             
@@ -118,22 +116,7 @@
               </ul>
             </div>
           </div>
-            <div class="col-md" dir="rtl">
-                <div class="ftco-footer-widget mb-5">
-                    <h2 style="text-align:right" class="ftco-heading-2 logo"><image src="~/images/logo.png" width="50px" height="50px" class="mr-1" />Aba Hussain</h2>
-
-                    <ul class="ftco-footer-social list-unstyled  mt-3" style="text-align:right">
-
-                        @*<li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-                    <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                    <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>*@
-                        @{Html.RenderAction("_social", "Home");
-                        }
-
-                    </ul>
-                </div>
-
-            </div>
+         
         </div>
         <div class="row">
           <div class="col-md-12 text-center">
