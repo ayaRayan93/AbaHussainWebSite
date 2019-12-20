@@ -10,13 +10,13 @@
             <PropertyRef Name="BasicID" />
           </Key>
           <Property Name="BasicID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="email" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="email" Type="nvarchar(max)" />
+          <Property Name="Address" Type="nvarchar(max)" />
           <Property Name="website" Type="nvarchar" MaxLength="100" />
           <Property Name="ourServtxt" Type="nvarchar" MaxLength="200" />
           <Property Name="headerMidtxt" Type="nvarchar" MaxLength="10" />
           <Property Name="ParagMidtxt" Type="nvarchar" MaxLength="100" />
-          <Property Name="callus" Type="nchar" MaxLength="15" Nullable="false" />
+          <Property Name="callus" Type="nchar" MaxLength="15" />
           <Property Name="maintextNews" Type="nvarchar" MaxLength="50" />
           <Property Name="mainImagText1" Type="nvarchar" MaxLength="20" />
           <Property Name="mainImagText2" Type="nvarchar" MaxLength="20" />
@@ -82,9 +82,17 @@
           <Property Name="ServicesID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="textServe" Type="nvarchar" MaxLength="100" />
-          <Property Name="img" Type="nvarchar" MaxLength="50" />
+          <Property Name="img" Type="nvarchar(max)" />
           <Property Name="enName" Type="nvarchar" MaxLength="50" />
           <Property Name="entxtServe" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="setting">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SocialMedia">
           <Key>
@@ -169,6 +177,7 @@
           <EntitySet Name="imgNew" EntityType="Self.imgNew" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Services" EntityType="Self.Services" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="setting" EntityType="Self.setting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SocialMedia" EntityType="Self.SocialMedia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubCategory" EntityType="Self.SubCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -199,13 +208,13 @@
             <PropertyRef Name="BasicID" />
           </Key>
           <Property Name="BasicID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="website" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ourServtxt" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="headerMidtxt" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="ParagMidtxt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="callus" Type="String" MaxLength="15" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="callus" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
           <Property Name="maintextNews" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="mainImagText1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="mainImagText2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -276,10 +285,18 @@
           <Property Name="ServicesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="textServe" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="img" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="img" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="enName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="entxtServe" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SubCategory" Relationship="Self.FK_SubCategory_Services" FromRole="Services" ToRole="SubCategory" />
+        </EntityType>
+        <EntityType Name="setting">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SocialMedia">
           <Key>
@@ -366,6 +383,7 @@
           <EntitySet Name="imgNew" EntityType="Self.imgNew" />
           <EntitySet Name="Products" EntityType="Self.Products" />
           <EntitySet Name="Services" EntityType="Self.Services" />
+          <EntitySet Name="setting" EntityType="Self.setting" />
           <EntitySet Name="SocialMedia" EntityType="Self.SocialMedia" />
           <EntitySet Name="SubCategory" EntityType="Self.SubCategory" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
@@ -477,6 +495,15 @@
                 <ScalarProperty Name="img" ColumnName="img" />
                 <ScalarProperty Name="enName" ColumnName="enName" />
                 <ScalarProperty Name="entxtServe" ColumnName="entxtServe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="setting">
+            <EntityTypeMapping TypeName="maindbModel.setting">
+              <MappingFragment StoreEntitySet="setting">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="password" ColumnName="password" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

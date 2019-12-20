@@ -323,7 +323,7 @@ namespace AbaHussainWebSite.Controllers
                 IEnumerable<Products> ProductsList = (from e in db.Products
                                                       where e.FKSubID == item.SubCategoryID
                                                       select e);
-                item.Products = ProductsList;
+               // item.Products = ProductsList;
             }
             return View(SubCategory1);
         }
@@ -359,7 +359,7 @@ namespace AbaHussainWebSite.Controllers
                 IEnumerable<Products> ProductsList = (from e in db.Products
                                                   where e.FKSubID == item.SubCategoryID
                                                       select e);
-                item.Products = ProductsList;
+                //item.Products = ProductsList;
             }
             return View("~/Views/Home/Products.cshtml", SubCategory1);
         }

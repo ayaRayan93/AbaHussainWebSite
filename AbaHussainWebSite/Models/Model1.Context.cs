@@ -32,6 +32,7 @@ namespace AbaHussainWebSite.Models
         public virtual DbSet<imgNew> imgNew { get; set; }
         public virtual DbSet<Products> Products { get; set; }
         public virtual DbSet<Services> Services { get; set; }
+        public virtual DbSet<setting> setting { get; set; }
         public virtual DbSet<SocialMedia> SocialMedia { get; set; }
         public virtual DbSet<SubCategory> SubCategory { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }

@@ -3,16 +3,23 @@
     ViewBag.Title = "تفاصيل الفرع";
     Layout = "~/Views/_LayoutPage1.cshtml";
 }
+<style>
+   span {
+        color: cadetblue;
+    }
+</style>
 @if (ViewBag.cunt > 0)
 {
 <div class="containertbl" dir="rtl">
     <h2 style="text-align:right">
-        فرع :
-        @*@Html.EditorFor(model => model.Rows[0]["Title"], new { htmlAttributes = new { @class = "form-control" } })
-        @Html.EditorFor(model => model.Rows[0]["enTitle"], new { htmlAttributes = new { @class = "form-control" } })*@
-        @Model.Rows[1]["Title"]
-        @Model.Rows[1]["enTitle"]
-    </h2>
+        <span>
+            فرع :
+            </span>
+            @*@Html.EditorFor(model => model.Rows[0]["Title"], new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.Rows[0]["enTitle"], new { htmlAttributes = new { @class = "form-control" } })*@
+            @Model.Rows[1]["Title"] -
+            @Model.Rows[1]["enTitle"]
+</h2>
     <h3 style="text-align:right">
         <span> التليفون : </span>
         @Model.Rows[0]["phone"]
@@ -20,37 +27,38 @@
 
     </h3>
    <p style="text-align:right">
-       العنوان :
-       @Model.Rows[1]["AddBranche"]
+       <span>العنوان :</span>
+       @Model.Rows[1]["AddBranche"] -
        @Model.Rows[1]["enAddrBranch"]
          @*  @Html.EditorFor(model => model.Rows[0]["AddBranche"], new { htmlAttributes = new { @class = "form-control" } })*@
            @*@Html.EditorFor(model => model.Rows[0]["enAddrBranch"], new { htmlAttributes = new { @class = "form-control" } })*@
 
    </p>
-    <img style="text-align:right" src="@Url.Content(Model.Rows[1]["imgSrc"].ToString())" width="200" height="100" alt="error"/>
-    <hr/>
+    @*<img style="text-align:left" src="@Url.Content(Model.Rows[1]["imgSrc"].ToString())" width="200" height="100" alt="error"/>*@
+    <hr style="height:1px;background-color:black;width:100%"/>
     
     <table class="table table-hover" dir="rtl">
         <tr>
             <th>
-               الصور الفرعيه للفرع
+                <span>الصور الفرعيه للفرع</span>
             </th>
-            <th>
-                
-            </th>
+            
         </tr>
+        <tr>
+            
+                @for (int i = 0; i < Model.Rows.Count; i++)
+                {
 
-        @for (int i = 0; i < Model.Rows.Count; i++)
-        {
-            <tr>
-               
-                <td>
-                    <img src="@Url.Content(Model.Rows[i]["imgSrc"].ToString())" width="100px" height="100px" />
-                </td>
-                <td><div id="remove"> <a id="@Model.Rows[i]["DetailsBranch"]" href="javascript:;">حذف</a></div></td>
-              </tr>
-        }
 
+                    <td>
+                        <img src="@Url.Content(Model.Rows[i]["imgSrc"].ToString())" width="100px" height="100px" />
+
+                        <div id="remove"> <a id="@Model.Rows[i]["DetailsBranch"]" href="javascript:;" style="color:red">حذف</a></div>
+                    </td>
+
+                }
+                   
+        </tr>
     </table>
 </div>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
