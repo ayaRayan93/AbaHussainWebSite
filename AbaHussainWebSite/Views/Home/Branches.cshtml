@@ -17,7 +17,9 @@
                             <a href="branch2.html"><h4 style="color: #007bff">@Html.DisplayFor(modelItem => item.Title) </h4></a>
                             <h5>@Html.DisplayFor(modelItem => item.phone)</h5>
                             <a href="https://goo.gl/maps/h43woi765StdNXua9" style="font-size:16px">@Html.DisplayFor(modelItem => item.AddBranche)</a>
-                            @Html.ActionLink("تفاصيل", "Details", new { id = item.BID })
+                            <br/>
+                            <a>@Html.ActionLink("تفاصيل", "Details", new { id = item.BID })</a>
+                            
                             
                         </div>
                     </div>
