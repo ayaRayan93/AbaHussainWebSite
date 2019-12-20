@@ -28,18 +28,64 @@ namespace AbaHussainWebSite.Controllers
         {
             try
             {
-
-                if (username == "Admin" && pass == "111")
+                con.Open();
+                com = new SqlCommand("select * from setting where name='"+username+"' and [password]='"+pass+"'",con);
+                SqlDataReader dr = com.ExecuteReader();
+               
+                DataTable dt = new DataTable();
+                dt.Load(dr);
+                con.Close();
+                if (dt.Rows.Count != 0)
                 {
+
+                    Session["name"] = dt.Rows[0]["name"];
+                    Session["id"] = dt.Rows[0]["id"];
+                    Session["pass"] = dt.Rows[0]["password"];
                     Session["UserLog"] = "login";
-                    return RedirectToAction("Home");
+                        return RedirectToAction("Home");
+                    
                 }
-                else { return View(); }
+                
+                else {
+                    Response.Write("<script>alert('اسم المستخدم او كلمة المرور خاطئة')</script>");
+                    return View(); }
             }
             catch
             {
                 return View();
             }
+        }
+        public ActionResult sett()
+        {if (Session["UserLog"] != null)
+            {
+                con.Open();
+                SqlCommand c = new SqlCommand("select * from setting where name='"+Session["name"].ToString()+"' and password='"+Session["pass"].ToString()+"' ",con);
+                SqlDataReader SqlDr1 = c.ExecuteReader();
+                DataTable dtt1 = new DataTable();
+                dtt1.Load(SqlDr1);
+                setting j = new setting();
+                j.id = int.Parse(dtt1.Rows[0]["id"].ToString());
+                j.name = dtt1.Rows[0]["name"].ToString();
+                j.password = dtt1.Rows[0]["password"].ToString();
+                
+                con.Close();
+                return View(j);
+            }
+            else { return RedirectToAction("Login"); }
+        }
+        [HttpPost]
+        public ActionResult sett(setting k)
+        {try
+            {
+                con.Open();
+                com = new SqlCommand("update  setting set name='"+k.name+"',password='"+k.password+"' where id="+k.id+" ",con);
+                com.ExecuteNonQuery();
+                con.Close();
+                Response.Write("<script>alert('تم التعديل')</script>");
+                return View();
+            }
+            catch { ViewBag.Emsg = "خطأ لم يتم الحفظ";  return View(); }
+           
         }
         public ActionResult Logout()
         {
@@ -719,33 +765,34 @@ namespace AbaHussainWebSite.Controllers
             }
             catch { con.Close(); return 0; }
         }
-        public ActionResult Details()
+        public ActionResult Details(int id)
         {if (Session["UserLog"] != null)
             {
-                return View();
-            }
-            else return Redirect("Login");
-        }
-        [HttpPost]
-        public ActionResult Details(int id)
-        {
-            try
-            {
-
                 con.Open();
                 com = new SqlCommand("select * from Branches inner join BranchDetail on Branches.BID = BranchDetail.FKBranchID where BID=" + id, con);
                 SqlDataReader SqlDr = com.ExecuteReader();
                 DataTable d = new DataTable();
                 d.Load(SqlDr);
-               
+
                 ViewBag.cunt = d.Rows.Count;
                 con.Close();
                 return View(d);
+               
             }
-            catch { con.Close(); return View(); }
-
-
+            else return Redirect("Login");
         }
+        //[HttpPost]
+        //public ActionResult Details(int id)
+        //{
+        //    try
+        //    {
+
+        //        return View();
+        //    }
+        //    catch { con.Close(); return View(); }
+
+
+        //}
 
         //----------------------------------------edit data in table ----------------------
         [HttpGet]
