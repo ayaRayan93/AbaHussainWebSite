@@ -61,7 +61,7 @@
                     <label class="control-label ">
                         صورة المنتج
                     </label>
-                    @{if(Model.img!=null)
+                    @{if(!String.IsNullOrEmpty(Model.img))
                     { <img src="@Url.Content(Model.img)" width="100px" height="100px" id="ii"/>}}
                     <input type="file" name="img" id="img" class="form-control" onchange="show(this)" />
                 </div>

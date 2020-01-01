@@ -15,23 +15,23 @@
         <span>
             فرع :
             </span>
-            @*@Html.EditorFor(model => model.Rows[0]["Title"], new { htmlAttributes = new { @class = "form-control" } })
-            @Html.EditorFor(model => model.Rows[0]["enTitle"], new { htmlAttributes = new { @class = "form-control" } })*@
-            @Model.Rows[1]["Title"] -
-            @Model.Rows[1]["enTitle"]
+            @Html.LabelForModel(Model.Rows[0]["Title"].ToString(), new { htmlAttributes = new { @class = "form-control" } })
+           - @Html.LabelForModel(Model.Rows[0]["enTitle"].ToString(), new { htmlAttributes = new { @class = "form-control" } })
+            @*@Model.Rows[1]["Title"] -
+            @Model.Rows[1]["enTitle"]*@
 </h2>
     <h3 style="text-align:right">
         <span> التليفون : </span>
-        @Model.Rows[0]["phone"]
-        @*@Html.EditorFor(model => model.Rows[0]["phone"], new { htmlAttributes = new { @class = "form-control" } })*@
+        @*@Model.Rows[0]["phone"]*@
+        @Html.LabelForModel(Model.Rows[0]["phone"].ToString(), new { htmlAttributes = new { @class = "form-control" } })
 
     </h3>
    <p style="text-align:right">
        <span>العنوان :</span>
-       @Model.Rows[1]["AddBranche"] -
-       @Model.Rows[1]["enAddrBranch"]
-         @*  @Html.EditorFor(model => model.Rows[0]["AddBranche"], new { htmlAttributes = new { @class = "form-control" } })*@
-           @*@Html.EditorFor(model => model.Rows[0]["enAddrBranch"], new { htmlAttributes = new { @class = "form-control" } })*@
+       @*@Model.Rows[1]["AddBranche"] -
+       @Model.Rows[1]["enAddrBranch"]*@
+           @Html.LabelForModel(Model.Rows[0]["AddBranche"].ToString(), new { htmlAttributes = new { @class = "form-control" } })
+          - @Html.LabelForModel(Model.Rows[0]["enAddrBranch"].ToString(), new { htmlAttributes = new { @class = "form-control" } })
 
    </p>
     @*<img style="text-align:left" src="@Url.Content(Model.Rows[1]["imgSrc"].ToString())" width="200" height="100" alt="error"/>*@
@@ -44,22 +44,23 @@
             </th>
             
         </tr>
-        <tr>
+       
+        
             
-                @for (int i = 0; i < Model.Rows.Count; i++)
-                {
-
-
-                    <td>
-                        <img src="@Url.Content(Model.Rows[i]["imgSrc"].ToString())" width="100px" height="100px" />
-
-                        <div id="remove"> <a id="@Model.Rows[i]["DetailsBranch"]" href="javascript:;" style="color:red">حذف</a></div>
-                    </td>
-
-                }
-                   
-        </tr>
+                    
+                    
     </table>
+
+    @for (int i = 0; i < Model.Rows.Count; i++)
+    {
+
+
+        <div class="float-left" style="margin:12px">
+            <img src="@Url.Content(Model.Rows[i]["imgSrc"].ToString())" width="100px" height="100px" />
+            <div id="remove"> <a id="@Model.Rows[i]["DetailsBranch"]" href="javascript:;" style="color:red">حذف</a></div>
+        </div>
+
+    }
 </div>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>

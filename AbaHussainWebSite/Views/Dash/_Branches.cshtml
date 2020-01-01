@@ -32,8 +32,12 @@
                 </td>
             
                 <td>
+                    @{if (!String.IsNullOrEmpty(Model.Rows[i]["mainImg"].ToString()))
+                        {
                     <img src="@Url.Content(Model.Rows[i]["mainImg"].ToString())" width="50px" height="50px"/>
-                </td>
+                            }
+                        }
+                 </td>
                 <td>
                     @Html.ActionLink("تعديل", "EditBranch", "Dash", new { id = Model.Rows[i]["BID"] },null)
                  </td>

@@ -12,9 +12,9 @@ namespace AbaHussainWebSite.Controllers
 {
     public class DashController : Controller
     {
-        // SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-CQI3I4K\MYSQLSERVER;Initial Catalog=maindb;Integrated Security=True");
+         SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
 
-        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussainweb;Persist Security Info=True;");
+       // SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussainweb;Persist Security Info=True;");
         SqlCommand com;
 
         // GET: Dash
@@ -546,27 +546,34 @@ namespace AbaHussainWebSite.Controllers
         public ActionResult products(Products pro)
         {
             HttpPostedFileBase file = Request.Files["img"];
-            if (file != null && file.ContentLength > 0)
-                try
+
+            try
+            {
+                DDlsub();
+                con.Open();
+
+                if (file != null && file.ContentLength > 0)
                 {
                     file.SaveAs(Server.MapPath("~/imgs/" + file.FileName));
                     pro.img = "~/imgs/" + file.FileName;
-                    con.Open();
+
                     com = new SqlCommand("insert into  Products Values ('" + pro.Price + "',N'" + pro.Text + "','" + pro.img + "'," + pro.FKSubID + ",N'" + pro.enText + "')", con);
                     com.ExecuteNonQuery();
+                }
+                else {
+                    com = new SqlCommand("insert into  Products(Price,Text,FKSubID,enText) Values ('" + pro.Price + "',N'" + pro.Text + "'," + pro.FKSubID + ",N'" + pro.enText + "')", con);
+                    com.ExecuteNonQuery();
+                }
                     con.Close();
 
-                    DDlsub();
+                    
                     if (ViewData["listsub"] != null)
                     { return Redirect("products"); }
                     else { return View(ViewBag.Emsg); }
                 }
                 catch { ViewBag.Emsg = "a product didn't insert correctly"; return View(); }
 
-            else
-            {
-                ViewBag.Emsg = "file not uploaded"; return View();
-            }
+          
         }
         public void DDlsub()
         {
@@ -634,28 +641,36 @@ namespace AbaHussainWebSite.Controllers
         {
 
             HttpPostedFileBase file = Request.Files["imgfile"];
-            if (file != null && file.ContentLength > 0)
+           
                 try
+                {
+                con.Open();
+                if (file != null && file.ContentLength > 0)
                 {
                     file.SaveAs(Server.MapPath("~/imgs/" + file.FileName));
                     serv.img = "~/imgs/" + file.FileName;
-                    con.Open();
+
                     string q = "insert into  Services Values (N'" + serv.Name + "',N'" + serv.textServe + "',N'" + serv.img + "','" + serv.enName + "','" + serv.entxtServe + "')";
                     com = new SqlCommand("insert into  Services Values (N'" + serv.Name + "',N'" + serv.textServe + "',N'" + serv.img + "','" + serv.enName + "','" + serv.entxtServe + "')", con);
                     com.ExecuteNonQuery();
+                }
+                else {
+                    string q = "insert into  Services Values (N'" + serv.Name + "',N'" + serv.textServe + "','" + serv.enName + "','" + serv.entxtServe + "')";
+                    com = new SqlCommand("insert into  Services(Name,textServe,enName,entxtServe) Values (N'" + serv.Name + "',N'" + serv.textServe + "','" + serv.enName + "','" + serv.entxtServe + "')", con);
+                    com.ExecuteNonQuery();
+
+                }
+
                     con.Close();
 
-                    return View();
+              return  Redirect("services");
                 }
                 catch(Exception ex)
                 {
                     ViewBag.Emsg = "your services didn't insert correctly"+ex.Message; return View();
                 }
 
-            else
-            {
-                ViewBag.Emsg = "file not uploaded"; return View();
-            }
+           
 
         }
         public PartialViewResult _services()
@@ -696,14 +711,22 @@ namespace AbaHussainWebSite.Controllers
             HttpPostedFileBase file = Request.Files["imgfile"];
             HttpPostedFileBase files = Request.Files["files"];
             // string[] files = Request.Files["fileUpload"];
-            if (file != null && file.ContentLength > 0)
+            
                 try
+                {
+                if (file != null && file.ContentLength > 0)
                 {
                     file.SaveAs(Server.MapPath("~/imgs/" + file.FileName));
                     br.mainImg = "~/imgs/" + file.FileName;
                     con.Open();
                     com = new SqlCommand("insert into  Branches Values ('" + br.phone + "',N'" + br.Title + "',N'" + br.mainImg + "',N'" + br.AddBranche + "',N'" + br.enTitle + "',N'" + br.enAddrBranch + "')", con);
                     com.ExecuteNonQuery();
+                }
+                else {
+                    con.Open();
+                    com = new SqlCommand("insert into  Branches(phone,Title,AddBranche,enTitle,enAddrBranch) Values ('" + br.phone + "',N'" + br.Title + "',N'" + br.AddBranche + "',N'" + br.enTitle + "',N'" + br.enAddrBranch + "')", con);
+                    com.ExecuteNonQuery();
+                }
                     int id = getMaxId();
                     SqlCommand com2;
                     for ( int i=0;i<Request.Files.Count; i++)
@@ -729,10 +752,7 @@ namespace AbaHussainWebSite.Controllers
                     ViewBag.Emsg = "your data didn't insert correctly"; return View();
                 }
 
-            else
-            {
-                ViewBag.Emsg = "file not uploaded"; return View();
-            }
+           
         }
         [HttpPost]
         public JsonResult Upload()
@@ -860,8 +880,30 @@ namespace AbaHussainWebSite.Controllers
                 }
                 else
                 {
-                    ViewBag.Emsg = "file not uploaded";
-                    return View();
+                    con.Open();
+                    com = new SqlCommand("update Branches set Title=N'" + bran.Title + "',enTitle=N'" + bran.enTitle + "',phone='" + bran.phone + "',AddBranche=N'" + bran.AddBranche + "',enAddrBranch=N'" + bran.enAddrBranch + "'where BID=" + bran.BID, con);
+                    com.ExecuteNonQuery();
+                    SqlCommand com2;
+                    for (int i = 0; i < Request.Files.Count; i++)
+                    {
+                        if (i == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (Request.Files[i].ContentLength > 0)
+                            {
+                                Request.Files[i].SaveAs(Server.MapPath("~/imgs/" + Request.Files[i].FileName));
+                                string imgSrc = "~/imgs/" + Request.Files[i].FileName;
+                                com2 = new SqlCommand("insert into BranchDetail values('" + imgSrc + "'," + bran.BID + ")", con);
+                                com2.ExecuteNonQuery();
+                            }
+                        }
+
+                        con.Close();
+                        return RedirectToAction("AllBranches");
+                    }
                 }
             }
             catch(Exception ex)
@@ -903,17 +945,26 @@ namespace AbaHussainWebSite.Controllers
         {
 
             HttpPostedFileBase file = Request.Files["imgfile"];
-            if (file != null && file.ContentLength > 0)
+            string pastpath = serv.img;
+            try
             {
-                try
+                con.Open();
+                if (file.ContentLength > 0)
                 {
                     file.SaveAs(Server.MapPath("~/imgs/" + file.FileName));
                     serv.img = "~/imgs/" + file.FileName;
-                    con.Open();
                     com = new SqlCommand("update Services set Name=N'" + serv.Name + "',textServe=N'" + serv.textServe + "',img=N'" + serv.img + "',enName=N'" + serv.enName + "',entxtServe=N'" + serv.entxtServe + "'where ServicesID=" + serv.ServicesID, con);
                     com.ExecuteNonQuery();
-                    con.Close();
-                    return RedirectToAction("Services");
+                }
+                else
+                {
+                    com = new SqlCommand("update Services set Name=N'" + serv.Name + "',textServe=N'" + serv.textServe + "',enName=N'" + serv.enName + "',entxtServe=N'" + serv.entxtServe + "'where ServicesID=" + serv.ServicesID, con);
+                    com.ExecuteNonQuery();
+                }
+
+                con.Close();
+
+                return RedirectToAction("Services");
                 }
 
                 catch
@@ -921,8 +972,8 @@ namespace AbaHussainWebSite.Controllers
                     ViewBag.Emsg = "فشل التعديل";
                     return View();
                 }
-            }
-            else { ViewBag.Emsg = "file not uploaded"; return View(); }
+            //}
+            //else { ViewBag.Emsg = "file not uploaded"; return View(); }
 
         }
 
@@ -1048,7 +1099,7 @@ namespace AbaHussainWebSite.Controllers
                     j.enText = dt.Rows[0]["enText"].ToString();
                     j.Price = decimal.Parse(dt.Rows[0]["Price"].ToString());
                     j.img = dt.Rows[0]["img"].ToString();
-j.FKSubID = int.Parse(dt.Rows[0]["FKSubID"].ToString());
+                    j.FKSubID = int.Parse(dt.Rows[0]["FKSubID"].ToString());
                     con.Close();
                     return View(j);
                 }
@@ -1061,16 +1112,24 @@ j.FKSubID = int.Parse(dt.Rows[0]["FKSubID"].ToString());
         {
             DDlsub();
             HttpPostedFileBase file = Request.Files["img"];
-            if (file != null && file.ContentLength > 0)
-            {
-                try
+             try
                 {
+                    con.Open();
+                if (file != null && file.ContentLength > 0)
+                {
+
                     file.SaveAs(Server.MapPath("~/imgs/" + file.FileName));
                     pro.img = "~/imgs/" + file.FileName;
-                    con.Open();
+
                     com = new SqlCommand("update Products set Text=N'" + pro.Text + "',enText=N'" + pro.enText + "',img=N'" + pro.img + "',Price=" + pro.Price + " where ProductID=" + pro.ProductID, con);
                     com.ExecuteNonQuery();
-                    
+                }
+                else
+                {
+                    com = new SqlCommand("update Products set Text=N'" + pro.Text + "',enText=N'" + pro.enText + "',Price=" + pro.Price + " where ProductID=" + pro.ProductID, con);
+                    com.ExecuteNonQuery();
+
+                }  
                     con.Close();
                     return RedirectToAction("products");
                 }
@@ -1079,12 +1138,10 @@ j.FKSubID = int.Parse(dt.Rows[0]["FKSubID"].ToString());
                     ViewBag.Emsg = "file not upload";
                     return View();
                 }
-            }
-            else
-            {
-                ViewBag.Emsg = "فشل التعديل";
-                return View();
-            }
+            
+            
+               
+           
         }
 
 
