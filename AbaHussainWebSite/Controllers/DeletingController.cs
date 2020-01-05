@@ -59,6 +59,7 @@ namespace AbaHussainWebSite.Controllers
                 com = new SqlCommand("delete from Services where ServicesID=" + id, con);
                 com.ExecuteNonQuery();
                 con.Close();
+            // RedirectToAction("Services", "Dash");
            // }
             //catch { }
 
