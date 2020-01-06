@@ -16,9 +16,10 @@ namespace AbaHussainWebSite.Controllers
         {
             Basics basic = (from e in db.Basics
                               select e).First();
-            ViewBag.email = basic.email;
-            ViewBag.callus = basic.callus;
-            ViewBag.parImgtxt = basic.parImgtxt;
+            
+                ViewBag.email = basic.email;
+                ViewBag.callus = basic.callus;
+                ViewBag.parImgtxt = basic.parImgtxt;
           
             IEnumerable<Services> Service = (from e in db.Services
                                 select e);
