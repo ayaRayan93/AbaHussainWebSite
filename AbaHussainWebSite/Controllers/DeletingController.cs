@@ -9,9 +9,9 @@ namespace AbaHussainWebSite.Controllers
 {
     public class DeletingController : Controller
     {
-        SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
+        //SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
 
-       // SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial catalog=hamdymor_abahussainweb;Integrated Security=True");
+        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial catalog=hamdymor_abahussainweb;Integrated Security=True");
         SqlCommand com;
         // GET: Deleting
         public ActionResult Index()
