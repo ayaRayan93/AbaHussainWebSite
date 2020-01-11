@@ -12,7 +12,7 @@ namespace AbaHussainWebSite.Controllers
 {
     public class DashController : Controller
     {
-        // SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
+        // SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Persist Security Info=True;");
 
        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussainweb;Persist Security Info=True;");
         SqlCommand com;
@@ -142,16 +142,16 @@ namespace AbaHussainWebSite.Controllers
             
             for (int t = 0; t < dt.Rows.Count; t++)
             {
-                if (!String.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"])))
-                {
-                    brow = int.Parse(dt.Rows[t]["BasicID"].ToString());
-                    benrow = brow + 1;
+                //if (!String.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"])))
+                //{
+                    arr[t]  = int.Parse(dt.Rows[t]["BasicID"].ToString());
+                   // benrow = brow + 1;
 
-                }
+               // }
             }
             con.Close();
-            arr[0] = brow;
-            arr[1] = benrow;
+            //arr[0] = brow;
+            //arr[1] = benrow;
             return arr;
         }
         [HttpPost]
@@ -169,7 +169,7 @@ namespace AbaHussainWebSite.Controllers
                 {
                     com = new SqlCommand("insert into  Basics(email,Address,website,callus) Values ('" + bas.email + "',N'" + bas.Address + "','" + bas.website + "','" + bas.callus + "')", con);
                     com.ExecuteNonQuery();
-                    com = new SqlCommand("insert into  Basics(Address) Values ('" + addr + "')", con);
+                    com = new SqlCommand("insert into  Basics(email,Address,website,callus) Values ('" + bas.email + "',N'" + addr + "','" + bas.website + "','" + bas.callus + "')", con);
                     com.ExecuteNonQuery();
                     con.Close();
                     ViewBag.msg = "your Data inserted successfully";
@@ -178,7 +178,7 @@ namespace AbaHussainWebSite.Controllers
                 {
                     com = new SqlCommand("update Basics set email='"+ bas.email + "',Address=N'"+ bas.Address + "',website='" + bas.website + "',callus='" + bas.callus + "' where BasicID="+brow, con);
                     com.ExecuteNonQuery();
-                    com = new SqlCommand("update   Basics set Address='" + addr + "' where BasicID="+benrow, con);
+                    com = new SqlCommand("update Basics set email='" + bas.email + "',Address=N'" + addr + "',website='" + bas.website + "',callus='" + bas.callus + "' where BasicID=" + benrow, con);
                     com.ExecuteNonQuery();
                     con.Close();
                     ViewBag.msg = "your Data Edited successfully";

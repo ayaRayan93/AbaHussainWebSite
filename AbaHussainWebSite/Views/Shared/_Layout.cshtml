@@ -90,22 +90,21 @@
 
     </div>
     <footer class="ftco-footer ftco-bg-dark ftco-section">
-        <div class="container">
-            <div class="row mb-5">
+        <div class="container" style="padding:0px;">
+            <div class="row">
 
-                <div class="col-md">
+                <div class="col-md" dir="rtl">
                     <div class="ftco-footer-widget mb-5 ml-md-4">
                         <h2 class="ftco-heading-2">الخدمات</h2>
                         <ul class="list-unstyled">
                             @{
                                 string str = ViewBag.service;
                                 string[] arr = str.Split(',');
-                                for (int i = 0; i < arr.Length-1; i++)
+                                for (int i = 0; i < arr.Length - 1; i++)
                                 {
                                     <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>@arr[i]</a></li>
 
                                 }
-
                             }
                         </ul>
                     </div>
