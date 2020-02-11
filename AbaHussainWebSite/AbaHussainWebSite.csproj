@@ -629,9 +629,18 @@
     <Content Include="Views\Home\Details.cshtml" />
     <Content Include="Views\Home\EDetails.cshtml" />
     <Content Include="Views\Home\DisplayProduct.cshtml" />
+    <Content Include="Views\_LayoutPage1.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Home\_services.cshtml" />
+    <Content Include="Views\Home\_Eservices.cshtml" />
+    <Content Include="Views\Home\_news.cshtml" />
+    <Content Include="Views\Home\_Enews.cshtml" />
+    <Content Include="Views\Shared\_social.cshtml" />
     <Content Include="Views\Dash\AllBranches.cshtml" />
+    <Content Include="Views\Dash\BackgroundImage.cshtml" />
     <Content Include="Views\Dash\branch.cshtml" />
     <Content Include="Views\Dash\Details.cshtml" />
+    <Content Include="Views\Dash\Edit.cshtml" />
     <Content Include="Views\Dash\EditBranch.cshtml" />
     <Content Include="Views\Dash\EditimgNew.cshtml" />
     <Content Include="Views\Dash\Editproduct.cshtml" />
@@ -643,6 +652,7 @@
     <Content Include="Views\Dash\mainText.cshtml" />
     <Content Include="Views\Dash\products.cshtml" />
     <Content Include="Views\Dash\Services.cshtml" />
+    <Content Include="Views\Dash\sett.cshtml" />
     <Content Include="Views\Dash\socialmedia.cshtml" />
     <Content Include="Views\Dash\subcategory.cshtml" />
     <Content Include="Views\Dash\_Branches.cshtml" />
@@ -651,15 +661,6 @@
     <Content Include="Views\Dash\_services.cshtml" />
     <Content Include="Views\Dash\_SocialLinks.cshtml" />
     <Content Include="Views\Dash\_subcat.cshtml" />
-    <Content Include="Views\_LayoutPage1.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Home\_services.cshtml" />
-    <Content Include="Views\Home\_Eservices.cshtml" />
-    <Content Include="Views\Home\_news.cshtml" />
-    <Content Include="Views\Home\_Enews.cshtml" />
-    <Content Include="Views\Shared\_social.cshtml" />
-    <Content Include="Views\Dash\Edit.cshtml" />
-    <Content Include="Views\Dash\sett.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -12,7 +12,8 @@
 {
 <div class="containertbl" dir="rtl">
     <h2 style="text-align:right">
-        <span>
+       <span hidden class="span1" id="@Model.Rows[0]["BID"]"></span>
+         <span>
             فرع :
             </span>
             @Html.LabelForModel(Model.Rows[0]["Title"].ToString(), new { htmlAttributes = new { @class = "form-control" } })
@@ -72,7 +73,8 @@
        $("#remove a").click(function (e) {
            e.preventDefault();
            var id = $(this).attr("id");
-
+           var idpage = $(".span1").attr("id");
+           var r = "/Dash/Details/"+idpage;
            var MSG = confirm("Are you sure you want to delete this Record?");
 
            if (MSG) {
@@ -83,6 +85,7 @@
                    data: { id: id },
                    success: function () {
                        $("#row_" + id).remove();
+                       window.location.href = r;
                    },
                    error: function () {
 

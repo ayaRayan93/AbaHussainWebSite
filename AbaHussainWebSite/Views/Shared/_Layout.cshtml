@@ -4,7 +4,6 @@
     <title>ابا حسين</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css">
@@ -29,7 +28,7 @@
         <div class="container">
             <div class="row no-gutters d-flex align-items-center align-items-stretch">
                 <div class="col-md-4 d-flex align-items-center py-4">
-                    <image src="~/images/logo.png" width="80px" height="80px" class="mr-1" /> <a class="navbar-brand" href=@Html.ActionLink("Aba Hussain","Index", "Home")><span style="color:#fff;font-size:15px">.co<span /></a>
+                    <image src="~/images/logo.png" width="80px" height="80px" class="mr-1" /> <a class="navbar-brand"> @Html.ActionLink("Aba Hussain","Index", "Home") <span style="color:#fff;font-size:15px">.co</span></a>
                 </div>
                 <div class="col-lg-8 d-block">
                     <div class="row d-flex">
@@ -64,13 +63,7 @@
             </button>
 
 
-            <form action="#" class="searchform order-lg-last">
-                <div class="form-group d-flex">
-                    <input type="text" class="form-control pl-3" placeholder="بحث">
-                    <button type="submit" class="form-control search"><span class="ion-ios-search"></span></button>
-                </div>
 
-            </form>
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ">
                     <li class="nav-item active nav-link">@Html.ActionLink("الرئيسية", "Index", "Home")</li>
@@ -87,13 +80,12 @@
     </nav>
     <div>
         @RenderBody()
-
     </div>
     <footer class="ftco-footer ftco-bg-dark ftco-section">
-        <div class="container" style="padding:0px;">
-            <div class="row">
+        <div class="container">
+            <div class="row mb-5">
 
-                <div class="col-md" dir="rtl">
+                <div class="col-md"style="margin-left:100px">
                     <div class="ftco-footer-widget mb-5 ml-md-4">
                         <h2 class="ftco-heading-2">الخدمات</h2>
                         <ul class="list-unstyled">
@@ -102,7 +94,8 @@
                                 string[] arr = str.Split(',');
                                 for (int i = 0; i < arr.Length - 1; i++)
                                 {
-                                    <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>@arr[i]</a></li>
+                                    <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>@Html.ActionLink(arr[i] + " ", "GetProducts", "Home", new { Service_Name = arr[i], subcat = "" }, null)</a></li>
+                                 
 
                                 }
                             }
@@ -111,13 +104,12 @@
                 </div>
                 <div class="col-md" dir="rtl">
                     <div class="ftco-footer-widget mb-5">
-                        <h2 style="text-align:right" class="ftco-heading-2 logo"><image src="~/images/logo.png" width="50px" height="50px" class="mr-1" />ابا حسين</h2>
-                     
+                        <h2 style="text-align:right" class="ftco-heading-2 logo"><image src="../images/logo.png" width="50px" height="50px" class="mr-1" />ابا حسين</h2>
                         <ul class="ftco-footer-social list-unstyled  mt-3" style="text-align:right">
 
                             @*<li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-                            <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                            <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>*@
+                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>*@
                             @{Html.RenderAction("_social", "Home");
                             }
 
@@ -128,7 +120,7 @@
 
 
             </div>
-            <div class="row">
+            <div class="row" style="margin:0px">
                 <div class="col-md-12 text-center">
                     <p>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -164,7 +156,7 @@
     <script src="~/https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
     <script src="~/js/google-map.js"></script>
     <script src="~/js/main.js"></script>
- 
+
 
 </body>
 </html>

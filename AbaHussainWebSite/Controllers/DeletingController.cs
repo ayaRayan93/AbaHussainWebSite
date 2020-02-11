@@ -9,9 +9,9 @@ namespace AbaHussainWebSite.Controllers
 {
     public class DeletingController : Controller
     {
-        //SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Persist Security Info=True;");
+       // SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
 
-        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial catalog=hamdymor_abahussainweb;Persist Security Info=True;");
+        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial catalog=hamdymor_abahussainweb;Integrated Security=True");
         SqlCommand com;
         // GET: Deleting
         public ActionResult Index()
@@ -20,25 +20,29 @@ namespace AbaHussainWebSite.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteSocial(int id)
+        public void DeleteSocial(int id)
         {
-            
+            try
+            {
                 con.Open();
-          
-                com = new SqlCommand("delete from SocialMedia where SocialID=" + id, con);
-                com.ExecuteNonQuery();
-                con.Close();
-                return Json(true, JsonRequestBehavior.AllowGet);
-            
+
+            com = new SqlCommand("delete from SocialMedia where SocialID=" + id, con);
+            com.ExecuteNonQuery();
+            con.Close();
+                // return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch { }
 
         }
         [HttpPost]
         public void Deletesubcat(int id)
-        {try {
+        {
+            try
+            {
                 con.Open();
                 com = new SqlCommand("delete from Products where FKSubID=" + id, con);
                 com.ExecuteNonQuery();
-                com = new SqlCommand("delete from SubCategory where SubCategoryID="+id, con);
+                com = new SqlCommand("delete from SubCategory where SubCategoryID=" + id, con);
                 com.ExecuteNonQuery();
                 con.Close();
             }
@@ -49,19 +53,19 @@ namespace AbaHussainWebSite.Controllers
         [HttpPost]
         public void Deleteserv(int id)
         {
-           // try
-           // {
+            try
+            {
                 con.Open();
-                //com = new SqlCommand("delete from Products join SubCategory on FKSubID=SubCategoryID where SubCategory.FKServID="+id, con);
-                //com.ExecuteNonQuery();
-                //com = new SqlCommand("delete from SubCategory where FKServID=" + id, con);
-                //com.ExecuteNonQuery();
-                com = new SqlCommand("delete from Services where ServicesID=" + id, con);
-                com.ExecuteNonQuery();
-                con.Close();
-            // RedirectToAction("Services", "Dash");
-           // }
-            //catch { }
+            //com = new SqlCommand("delete from Products join SubCategory on FKSubID=SubCategoryID where SubCategory.FKServID="+id, con);
+            //com.ExecuteNonQuery();
+            //com = new SqlCommand("delete from SubCategory where FKServID=" + id, con);
+            //com.ExecuteNonQuery();
+            com = new SqlCommand("delete from Services where ServicesID=" + id, con);
+            com.ExecuteNonQuery();
+            con.Close();
+                // RedirectToAction("Services", "Dash");
+            }
+            catch { }
 
         }
 
@@ -89,7 +93,7 @@ namespace AbaHussainWebSite.Controllers
                 com = new SqlCommand("delete from Products where ProductID=" + id, con);
                 com.ExecuteNonQuery();
                 con.Close();
-              
+
             }
             catch { }
 

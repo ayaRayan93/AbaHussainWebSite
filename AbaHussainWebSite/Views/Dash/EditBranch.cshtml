@@ -94,7 +94,9 @@
                         الصور الفرعية للفرع
                     </label>
                     @*<input type="file" name="imgsfile" class="form-control" />*@
+                    
                     <input type='file' multiple id='fileUpload' name="files" data-url="@Url.Action("Upload","DashController")" />
+                <span>@ViewBag.countImages</span>
                 </div>
             </div>
             <div class="form-group">

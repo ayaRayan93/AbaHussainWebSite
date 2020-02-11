@@ -12,9 +12,9 @@ namespace AbaHussainWebSite.Controllers
 {
     public class DashController : Controller
     {
-        // SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Persist Security Info=True;");
+       // SqlConnection con = new SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
 
-       SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussainweb;Persist Security Info=True;");
+        SqlConnection con = new SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussainweb;Persist Security Info=True;");
         SqlCommand com;
 
         // GET: Dash
@@ -29,9 +29,9 @@ namespace AbaHussainWebSite.Controllers
             try
             {
                 con.Open();
-                com = new SqlCommand("select * from setting where name='"+username+"' and [password]='"+pass+"'",con);
+                com = new SqlCommand("select * from setting where name='" + username + "' and [password]='" + pass + "'", con);
                 SqlDataReader dr = com.ExecuteReader();
-               
+
                 DataTable dt = new DataTable();
                 dt.Load(dr);
                 con.Close();
@@ -42,24 +42,79 @@ namespace AbaHussainWebSite.Controllers
                     Session["id"] = dt.Rows[0]["id"];
                     Session["pass"] = dt.Rows[0]["password"];
                     Session["UserLog"] = "login";
-                        return RedirectToAction("Home");
-                    
+                    return RedirectToAction("Home");
+
                 }
-                
-                else {
+
+                else
+                {
                     Response.Write("<script>alert('اسم المستخدم او كلمة المرور خاطئة')</script>");
-                    return View(); }
+                    return View();
+                }
             }
             catch
             {
                 return View();
             }
         }
-        public ActionResult sett()
-        {if (Session["UserLog"] != null)
+        public ActionResult BackgroundImage()
+        {
+            ViewBag.successMsg = "";
+            ViewBag.error = "";
+            return View();
+        }
+        [HttpPost]
+        public ActionResult BackgroundImage(ImageBackground ii)
+        {
+            HttpPostedFileBase file = Request.Files["imgfile"];
+
+            try
             {
                 con.Open();
-                SqlCommand c = new SqlCommand("select * from setting where name='"+Session["name"].ToString()+"' and password='"+Session["pass"].ToString()+"' ",con);
+                if (file != null && file.ContentLength > 0)
+                {
+                    file.SaveAs(Server.MapPath("~/imgs/" + file.FileName));
+                    ii.imgSrc = "~/imgs/" + file.FileName;
+                    string extension = System.IO.Path.GetExtension(file.FileName);
+                    if (extension == ".JPEG" || extension == ".png" || extension == ".PNG" || extension == ".jpg" || extension == ".jpeg")
+                    {
+                        SqlCommand ee = new SqlCommand("select * from ImageBackground", con);
+                        SqlDataReader dr = ee.ExecuteReader();
+                        DataTable dt = new DataTable();
+                        dt.Load(dr);
+                        if (dt.Rows.Count == 0)
+                        {
+                            string q = "insert into  ImageBackground Values (N'" + ii.imgSrc + "')";
+                            com = new SqlCommand(q, con);
+                            com.ExecuteNonQuery();
+                            ViewBag.successMsg = "تم الرفع بنجاع";
+                        }
+                        else
+                        {
+                            string q = "update  ImageBackground set imgSrc=N'" + ii.imgSrc + "'";
+                            com = new SqlCommand(q, con);
+                            com.ExecuteNonQuery();
+                            ViewBag.successMsg = "تم الرفع بنجاع";
+                        }
+
+                    }
+                }
+                con.Close();
+                return Redirect("BackgroundImage");
+            }
+            catch
+            {
+                ViewData["error"] = "لم يتم الحفظ";
+                return View();
+            }
+
+        }
+        public ActionResult sett()
+        {
+            if (Session["UserLog"] != null)
+            {
+                con.Open();
+                SqlCommand c = new SqlCommand("select * from setting where name='" + Session["name"].ToString() + "' and password='" + Session["pass"].ToString() + "' ", con);
                 SqlDataReader SqlDr1 = c.ExecuteReader();
                 DataTable dtt1 = new DataTable();
                 dtt1.Load(SqlDr1);
@@ -67,7 +122,7 @@ namespace AbaHussainWebSite.Controllers
                 j.id = int.Parse(dtt1.Rows[0]["id"].ToString());
                 j.name = dtt1.Rows[0]["name"].ToString();
                 j.password = dtt1.Rows[0]["password"].ToString();
-                
+
                 con.Close();
                 return View(j);
             }
@@ -75,17 +130,18 @@ namespace AbaHussainWebSite.Controllers
         }
         [HttpPost]
         public ActionResult sett(setting k)
-        {try
+        {
+            try
             {
                 con.Open();
-                com = new SqlCommand("update  setting set name='"+k.name+"',password='"+k.password+"' where id="+k.id+" ",con);
+                com = new SqlCommand("update  setting set name='" + k.name + "',password='" + k.password + "' where id=" + k.id + " ", con);
                 com.ExecuteNonQuery();
                 con.Close();
                 Response.Write("<script>alert('تم التعديل')</script>");
                 return View();
             }
-            catch { ViewBag.Emsg = "خطأ لم يتم الحفظ";  return View(); }
-           
+            catch { ViewBag.Emsg = "خطأ لم يتم الحفظ"; return View(); }
+
         }
         public ActionResult Logout()
         {
@@ -93,16 +149,17 @@ namespace AbaHussainWebSite.Controllers
             return Redirect("Login");
         }
         public ActionResult Home(string addr)
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 try
                 {
-                    int []ar = new int[2];
-                       ar = getids();
+                    int[] ar = new int[2];
+                    ar = getids();
                     int brow = ar[0];
                     int benrow = ar[1];
                     con.Open();
-                    if (brow != 0 && benrow!=0)
+                    if (brow != 0 && benrow != 0)
                     {
                         Basics j = new Basics();
                         com = new SqlCommand("select * from Basics where BasicID=" + brow + " ", con);
@@ -127,31 +184,31 @@ namespace AbaHussainWebSite.Controllers
                 }
                 catch { return View(); }
             }
-            else { return Redirect("Login"); }   
+            else { return Redirect("Login"); }
         }
         public int[] getids()
         {
             int brow = 0;
             int benrow = 0;
-            int[] arr=new int[2] { brow,benrow};
+            int[] arr = new int[2] { brow, benrow };
             con.Open();
             com = new SqlCommand("select * from Basics", con);
             SqlDataReader dr = com.ExecuteReader();
             DataTable dt = new DataTable();
             dt.Load(dr);
-            
+
             for (int t = 0; t < dt.Rows.Count; t++)
             {
-                //if (!String.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"])))
-                //{
-                    arr[t]  = int.Parse(dt.Rows[t]["BasicID"].ToString());
-                   // benrow = brow + 1;
+                if (!String.IsNullOrEmpty(Convert.ToString(dt.Rows[t]["email"])))
+                {
+                    brow = int.Parse(dt.Rows[t]["BasicID"].ToString());
+                    benrow = brow + 1;
 
-               // }
+                }
             }
             con.Close();
-            //arr[0] = brow;
-            //arr[1] = benrow;
+            arr[0] = brow;
+            arr[1] = benrow;
             return arr;
         }
         [HttpPost]
@@ -164,26 +221,26 @@ namespace AbaHussainWebSite.Controllers
                 int brow = r[0];
                 int benrow = r[1];
                 con.Open();
-               
+
                 if (brow == 0 && benrow == 0)
                 {
                     com = new SqlCommand("insert into  Basics(email,Address,website,callus) Values ('" + bas.email + "',N'" + bas.Address + "','" + bas.website + "','" + bas.callus + "')", con);
                     com.ExecuteNonQuery();
-                    com = new SqlCommand("insert into  Basics(email,Address,website,callus) Values ('" + bas.email + "',N'" + addr + "','" + bas.website + "','" + bas.callus + "')", con);
+                    com = new SqlCommand("insert into  Basics(Address) Values ('" + addr + "')", con);
                     com.ExecuteNonQuery();
                     con.Close();
                     ViewBag.msg = "your Data inserted successfully";
                 }
                 else
                 {
-                    com = new SqlCommand("update Basics set email='"+ bas.email + "',Address=N'"+ bas.Address + "',website='" + bas.website + "',callus='" + bas.callus + "' where BasicID="+brow, con);
+                    com = new SqlCommand("update Basics set email='" + bas.email + "',Address=N'" + bas.Address + "',website='" + bas.website + "',callus='" + bas.callus + "' where BasicID=" + brow, con);
                     com.ExecuteNonQuery();
-                    com = new SqlCommand("update Basics set email='" + bas.email + "',Address=N'" + addr + "',website='" + bas.website + "',callus='" + bas.callus + "' where BasicID=" + benrow, con);
+                    com = new SqlCommand("update   Basics set Address='" + addr + "' where BasicID=" + benrow, con);
                     com.ExecuteNonQuery();
                     con.Close();
                     ViewBag.msg = "your Data Edited successfully";
                 }
-                 return Redirect("Home");
+                return Redirect("Home");
             }
             catch
             {
@@ -224,7 +281,7 @@ namespace AbaHussainWebSite.Controllers
                         j.midHeaderIndexPage = dtt.Rows[0]["midHeaderIndexPage"].ToString();
                         j.midParaIndexPage = dtt.Rows[0]["midParaIndexPage"].ToString();
                         j.parImgtxt = dtt.Rows[0]["parImgtxt"].ToString();
-                       
+
                         ViewBag.enourServtxt = dtt1.Rows[0]["ourServtxt"].ToString();
                         ViewBag.headerMidtxt = dtt1.Rows[0]["headerMidtxt"].ToString();
                         ViewBag.enParagMidtxt = dtt1.Rows[0]["ParagMidtxt"].ToString();
@@ -267,12 +324,13 @@ namespace AbaHussainWebSite.Controllers
                     return Redirect("mainText");
                 }
                 else { ViewBag.Emsg = "برجاء ادخال معلومات الاتصال اولا"; return View(); }
-                
+
             }
-            catch(Exception ex) { ViewBag.Emsg = "your Data didn't insert correctly"; return View(); }
+            catch (Exception ex) { ViewBag.Emsg = "your Data didn't insert correctly"; return View(); }
         }
         public ActionResult socialmedia()
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 DDLSocialMedia();
                 return View();
@@ -323,7 +381,7 @@ namespace AbaHussainWebSite.Controllers
                     j.SocialID = int.Parse(dt.Rows[0]["SocialID"].ToString());
                     j.icon = dt.Rows[0]["icon"].ToString();
                     j.link = dt.Rows[0]["link"].ToString();
-                   
+
                     con.Close();
                     return View(j);
                 }
@@ -437,7 +495,8 @@ namespace AbaHussainWebSite.Controllers
 
         }
         public ActionResult subcategory()
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 DDlSevices();
                 return View();
@@ -495,7 +554,8 @@ namespace AbaHussainWebSite.Controllers
             return PartialView("_subcat", dt);
         }
         public ActionResult LastNew()
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 return View();
             }
@@ -535,7 +595,8 @@ namespace AbaHussainWebSite.Controllers
             return PartialView("_lastNew", dt);
         }
         public ActionResult products()
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 DDlsub();
                 return View();
@@ -560,20 +621,21 @@ namespace AbaHussainWebSite.Controllers
                     com = new SqlCommand("insert into  Products Values ('" + pro.Price + "',N'" + pro.Text + "','" + pro.img + "'," + pro.FKSubID + ",N'" + pro.enText + "')", con);
                     com.ExecuteNonQuery();
                 }
-                else {
+                else
+                {
                     com = new SqlCommand("insert into  Products(Price,Text,FKSubID,enText) Values ('" + pro.Price + "',N'" + pro.Text + "'," + pro.FKSubID + ",N'" + pro.enText + "')", con);
                     com.ExecuteNonQuery();
                 }
-                    con.Close();
+                con.Close();
 
-                    
-                    if (ViewData["listsub"] != null)
-                    { return Redirect("products"); }
-                    else { return View(ViewBag.Emsg); }
-                }
-                catch { ViewBag.Emsg = "a product didn't insert correctly"; return View(); }
 
-          
+                if (ViewData["listsub"] != null)
+                { return Redirect("products"); }
+                else { return View(ViewBag.Emsg); }
+            }
+            catch { ViewBag.Emsg = "a product didn't insert correctly"; return View(); }
+
+
         }
         public void DDlsub()
         {
@@ -611,7 +673,8 @@ namespace AbaHussainWebSite.Controllers
             return PartialView("_product", dt);
         }
         public ActionResult Services()
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 try
                 {
@@ -641,9 +704,9 @@ namespace AbaHussainWebSite.Controllers
         {
 
             HttpPostedFileBase file = Request.Files["imgfile"];
-           
-                try
-                {
+
+            try
+            {
                 con.Open();
                 if (file != null && file.ContentLength > 0)
                 {
@@ -654,23 +717,24 @@ namespace AbaHussainWebSite.Controllers
                     com = new SqlCommand("insert into  Services Values (N'" + serv.Name + "',N'" + serv.textServe + "',N'" + serv.img + "','" + serv.enName + "','" + serv.entxtServe + "')", con);
                     com.ExecuteNonQuery();
                 }
-                else {
+                else
+                {
                     string q = "insert into  Services Values (N'" + serv.Name + "',N'" + serv.textServe + "','" + serv.enName + "','" + serv.entxtServe + "')";
                     com = new SqlCommand("insert into  Services(Name,textServe,enName,entxtServe) Values (N'" + serv.Name + "',N'" + serv.textServe + "','" + serv.enName + "','" + serv.entxtServe + "')", con);
                     com.ExecuteNonQuery();
 
                 }
 
-                    con.Close();
+                con.Close();
 
-              return  Redirect("services");
-                }
-                catch(Exception ex)
-                {
-                    ViewBag.Emsg = "your services didn't insert correctly"+ex.Message; return View();
-                }
+                return Redirect("services");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Emsg = "your services didn't insert correctly" + ex.Message; return View();
+            }
 
-           
+
 
         }
         public PartialViewResult _services()
@@ -698,7 +762,8 @@ namespace AbaHussainWebSite.Controllers
             return PartialView("_Branches", dt);
         }
         public ActionResult AllBranches()
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 return View();
             }
@@ -711,9 +776,9 @@ namespace AbaHussainWebSite.Controllers
             HttpPostedFileBase file = Request.Files["imgfile"];
             HttpPostedFileBase files = Request.Files["files"];
             // string[] files = Request.Files["fileUpload"];
-            
-                try
-                {
+
+            try
+            {
                 if (file != null && file.ContentLength > 0)
                 {
                     file.SaveAs(Server.MapPath("~/imgs/" + file.FileName));
@@ -722,37 +787,39 @@ namespace AbaHussainWebSite.Controllers
                     com = new SqlCommand("insert into  Branches Values ('" + br.phone + "',N'" + br.Title + "',N'" + br.mainImg + "',N'" + br.AddBranche + "',N'" + br.enTitle + "',N'" + br.enAddrBranch + "')", con);
                     com.ExecuteNonQuery();
                 }
-                else {
+                else
+                {
                     con.Open();
                     com = new SqlCommand("insert into  Branches(phone,Title,AddBranche,enTitle,enAddrBranch) Values ('" + br.phone + "',N'" + br.Title + "',N'" + br.AddBranche + "',N'" + br.enTitle + "',N'" + br.enAddrBranch + "')", con);
                     com.ExecuteNonQuery();
                 }
-                    int id = getMaxId();
-                    SqlCommand com2;
-                    for ( int i=0;i<Request.Files.Count; i++)
-                    { if (i == 0)
-                        { continue; }
-                        else
+                int id = getMaxId();
+                SqlCommand com2;
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    if (i == 0)
+                    { continue; }
+                    else
+                    {
+                        if (Request.Files[i].ContentLength > 0)
                         {
-                            if (Request.Files[i].ContentLength > 0)
-                            {
-                                Request.Files[i].SaveAs(Server.MapPath("~/imgs/" + Request.Files[i].FileName));
-                                bd.imgSrc = "~/imgs/" + Request.Files[i].FileName;
-                                com2 = new SqlCommand("insert into BranchDetail values('" + bd.imgSrc + "'," + id + ")", con);
-                                com2.ExecuteNonQuery();
-                            }
+                            Request.Files[i].SaveAs(Server.MapPath("~/imgs/" + Request.Files[i].FileName));
+                            bd.imgSrc = "~/imgs/" + Request.Files[i].FileName;
+                            com2 = new SqlCommand("insert into BranchDetail values(N'" + bd.imgSrc + "'," + id + ")", con);
+                            com2.ExecuteNonQuery();
                         }
                     }
-                    con.Close();
-                    ViewBag.msg = "your data inserted successfully";
-                    return Redirect("AllBranches");
                 }
-                catch(Exception ex)
-                {
-                    ViewBag.Emsg = "your data didn't insert correctly"; return View();
-                }
+                con.Close();
+                ViewBag.msg = "your data inserted successfully";
+                return Redirect("AllBranches");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Emsg = "your data didn't insert correctly"; return View();
+            }
 
-           
+
         }
         [HttpPost]
         public JsonResult Upload()
@@ -766,7 +833,7 @@ namespace AbaHussainWebSite.Controllers
                 {
                     file.SaveAs(Server.MapPath("~/imgs/" + file.FileName));
                     com = new SqlCommand("insert into BranchDetail values(N'" + bd.imgSrc + "'," + getMaxId() + ")", con);
-
+                    com.ExecuteNonQuery();
                 }
             }
             con.Close();
@@ -786,7 +853,8 @@ namespace AbaHussainWebSite.Controllers
             catch { con.Close(); return 0; }
         }
         public ActionResult Details(int id)
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 con.Open();
                 com = new SqlCommand("select * from Branches inner join BranchDetail on Branches.BID = BranchDetail.FKBranchID where BID=" + id, con);
@@ -797,7 +865,7 @@ namespace AbaHussainWebSite.Controllers
                 ViewBag.cunt = d.Rows.Count;
                 con.Close();
                 return View(d);
-               
+
             }
             else return Redirect("Login");
         }
@@ -817,7 +885,8 @@ namespace AbaHussainWebSite.Controllers
         //----------------------------------------edit data in table ----------------------
         [HttpGet]
         public ActionResult EditBranch(int id)
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 try
                 {
@@ -834,6 +903,11 @@ namespace AbaHussainWebSite.Controllers
                     j.AddBranche = dt.Rows[0]["AddBranche"].ToString();
                     j.enAddrBranch = dt.Rows[0]["enAddrBranch"].ToString();
                     j.mainImg = dt.Rows[0]["mainImg"].ToString();
+                    com = new SqlCommand("select * from BranchDetail where FKBranchID=" + j.BID + " ", con);
+                    SqlDataReader SqlDr2 = com.ExecuteReader();
+                    DataTable dt2 = new DataTable();
+                    dt2.Load(SqlDr2);
+                    ViewBag.countImages = dt2.Rows.Count;
                     con.Close();
                     return View(j);
                 }
@@ -869,7 +943,7 @@ namespace AbaHussainWebSite.Controllers
                             {
                                 Request.Files[i].SaveAs(Server.MapPath("~/imgs/" + Request.Files[i].FileName));
                                 string imgSrc = "~/imgs/" + Request.Files[i].FileName;
-                                com2 = new SqlCommand("insert into BranchDetail values('" + imgSrc + "'," + bran.BID + ")", con);
+                                com2 = new SqlCommand("insert into BranchDetail values(N'" + imgSrc + "'," + bran.BID + ")", con);
                                 com2.ExecuteNonQuery();
                             }
                         }
@@ -896,17 +970,17 @@ namespace AbaHussainWebSite.Controllers
                             {
                                 Request.Files[i].SaveAs(Server.MapPath("~/imgs/" + Request.Files[i].FileName));
                                 string imgSrc = "~/imgs/" + Request.Files[i].FileName;
-                                com2 = new SqlCommand("insert into BranchDetail values('" + imgSrc + "'," + bran.BID + ")", con);
+                                com2 = new SqlCommand("insert into BranchDetail values(N'" + imgSrc + "'," + bran.BID + ")", con);
                                 com2.ExecuteNonQuery();
                             }
                         }
 
-                        con.Close();
-                        return RedirectToAction("AllBranches");
                     }
+                    con.Close();
+                    return RedirectToAction("AllBranches");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ViewBag.Emsg = "فشل التعديل";
                 return View();
@@ -917,7 +991,8 @@ namespace AbaHussainWebSite.Controllers
 
         [HttpGet]
         public ActionResult EditServ(int id)
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 try
                 {
@@ -965,13 +1040,13 @@ namespace AbaHussainWebSite.Controllers
                 con.Close();
 
                 return RedirectToAction("Services");
-                }
+            }
 
-                catch
-                {
-                    ViewBag.Emsg = "فشل التعديل";
-                    return View();
-                }
+            catch
+            {
+                ViewBag.Emsg = "فشل التعديل";
+                return View();
+            }
             //}
             //else { ViewBag.Emsg = "file not uploaded"; return View(); }
 
@@ -979,7 +1054,8 @@ namespace AbaHussainWebSite.Controllers
 
         [HttpGet]
         public ActionResult EditimgNew(int id)
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 try
                 {
@@ -1035,13 +1111,14 @@ namespace AbaHussainWebSite.Controllers
 
         [HttpGet]
         public ActionResult Editsubcate(int id)
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 try
                 {
                     DDlSevices();
                     con.Open();
-                   
+
                     SubCategory j = new SubCategory();
                     com = new SqlCommand("select * from SubCategory where SubCategoryID=" + id + " ", con);
                     SqlDataReader SqlDr = com.ExecuteReader();
@@ -1050,7 +1127,7 @@ namespace AbaHussainWebSite.Controllers
                     j.SubCategoryID = int.Parse(dt.Rows[0]["SubCategoryID"].ToString());
                     j.SubCateName = dt.Rows[0]["SubCateName"].ToString();
                     j.enSubName = dt.Rows[0]["enSubName"].ToString();
-                   j.FKServID= int.Parse(dt.Rows[0]["FKServID"].ToString());
+                    j.FKServID = int.Parse(dt.Rows[0]["FKServID"].ToString());
                     con.Close();
                     return View(j);
                 }
@@ -1060,30 +1137,32 @@ namespace AbaHussainWebSite.Controllers
         }
         [HttpPost]
         public ActionResult Editsubcate(SubCategory sub)
-        { try
-                {
+        {
+            try
+            {
                 DDlSevices();
                 con.Open();
-               
-                com = new SqlCommand("update SubCategory set SubCateName=N'" + sub.SubCateName + "',enSubName=N'" + sub.enSubName + "' where SubCategoryID=" + sub.SubCategoryID, con);
-                 com.ExecuteNonQuery();
-                 con.Close();
-                   
-                    return RedirectToAction("subcategory");
-                }
 
-                catch
-                {
-                    ViewBag.Emsg = "فشل التعديل";
-                    return View();
-                }
-           
+                com = new SqlCommand("update SubCategory set SubCateName=N'" + sub.SubCateName + "',enSubName=N'" + sub.enSubName + "' where SubCategoryID=" + sub.SubCategoryID, con);
+                com.ExecuteNonQuery();
+                con.Close();
+
+                return RedirectToAction("subcategory");
+            }
+
+            catch
+            {
+                ViewBag.Emsg = "فشل التعديل";
+                return View();
+            }
+
         }
 
-        
-              [HttpGet]
+
+        [HttpGet]
         public ActionResult Editproduct(int id)
-        {if (Session["UserLog"] != null)
+        {
+            if (Session["UserLog"] != null)
             {
                 try
                 {
@@ -1112,9 +1191,9 @@ namespace AbaHussainWebSite.Controllers
         {
             DDlsub();
             HttpPostedFileBase file = Request.Files["img"];
-             try
-                {
-                    con.Open();
+            try
+            {
+                con.Open();
                 if (file != null && file.ContentLength > 0)
                 {
 
@@ -1129,19 +1208,19 @@ namespace AbaHussainWebSite.Controllers
                     com = new SqlCommand("update Products set Text=N'" + pro.Text + "',enText=N'" + pro.enText + "',Price=" + pro.Price + " where ProductID=" + pro.ProductID, con);
                     com.ExecuteNonQuery();
 
-                }  
-                    con.Close();
-                    return RedirectToAction("products");
                 }
-                catch
-                {
-                    ViewBag.Emsg = "file not upload";
-                    return View();
-                }
-            
-            
-               
-           
+                con.Close();
+                return RedirectToAction("products");
+            }
+            catch
+            {
+                ViewBag.Emsg = "file not upload";
+                return View();
+            }
+
+
+
+
         }
 
 

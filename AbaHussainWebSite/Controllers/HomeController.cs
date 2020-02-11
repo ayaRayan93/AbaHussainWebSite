@@ -20,16 +20,19 @@ namespace AbaHussainWebSite.Controllers
                 ViewBag.email = basic.email;
                 ViewBag.callus = basic.callus;
                 ViewBag.parImgtxt = basic.parImgtxt;
-          
+
+            string image = (from e in db.ImageBackground
+                            select e.imgSrc).First();
+            ViewBag.ImageBackground = image;
             IEnumerable<Services> Service = (from e in db.Services
                                 select e);
             string s = "";
             foreach (Services item in Service)
             {
-                s += item.Name;
+                s += item.Name+",";
             }
             ViewBag.service = s;
-            return View();
+            return View(basic);
         }
         public PartialViewResult _services()
         {
@@ -57,6 +60,9 @@ namespace AbaHussainWebSite.Controllers
             ViewBag.email = basic.email;
             ViewBag.callus = basic.callus;
             ViewBag.parImgtxt = basic.parImgtxt;
+            string image = (from e in db.ImageBackground
+                                     select e.imgSrc).First();
+            ViewBag.ImageBackground = image;
             IEnumerable<SocialMedia> SocialMedialist = (from e in db.SocialMedia
                                                         select e);
             ViewData["listSocial"] = SocialMedialist;
@@ -68,7 +74,7 @@ namespace AbaHussainWebSite.Controllers
                 s += item.enName + ",";
             }
             ViewBag.service = s;
-            return View();
+            return View(basic);
         }
         public PartialViewResult _Eservices()
         {
@@ -157,7 +163,7 @@ namespace AbaHussainWebSite.Controllers
                 s += item.enName + ",";
             }
             ViewBag.service = s;
-            return View();
+            return View(basic);
         }
         public ActionResult E_Contact()
         {
@@ -176,7 +182,7 @@ namespace AbaHussainWebSite.Controllers
                 s += item.enName + ",";
             }
             ViewBag.service = s;
-            return View();
+            return View(basic);
         }
         public ActionResult Branches()
         {
@@ -352,7 +358,11 @@ namespace AbaHussainWebSite.Controllers
         [HttpGet]
         public ActionResult GetProducts(string service_Name,string CategoryID)
         {
-        //   string dd= RouteData.Values["CategoryID"].ToString();
+            //   string dd= RouteData.Values["CategoryID"].ToString();
+            try
+            {
+
+           
             Basics basic = (from e in db.Basics
                             select e).First();
             ViewBag.email = basic.email;
@@ -386,40 +396,96 @@ namespace AbaHussainWebSite.Controllers
                 Servicea = (from e in db.Services
                                      where e.Name == service_Name
                                      select e).First();
-                SubCategory1 = (from e in db.SubCategory
-                                where e.FKServID == Servicea.ServicesID
-                                select e).First();
+                    try
+                    {
+                        SubCategory1 = (from e in db.SubCategory
+                                        where e.FKServID == Servicea.ServicesID
+                                        select e).First();
+                    }
+                    catch
+                    {
+                        return View("~/Views/Home/Products.cshtml", null);
+                    }
+
+                }
+                IEnumerable<SubCategory> SubCategorylist = (from e in db.SubCategory
+                                                            where e.FKServID == Servicea.ServicesID
+                                                            select e);
+
+                string sub = "";
+                foreach (SubCategory item in SubCategorylist)
+                {
+                    sub += item.SubCateName + ",";
+                }
+                ViewBag.SubCategory = sub;
+
+
+
+
+                IEnumerable<Products> ProductsList = (from e in db.Products
+                                                      where e.FKSubID == SubCategory1.SubCategoryID
+                                                      select e);
+                con.Close();
+                con.Open();
+                com = new SqlCommand("select * from Products where FKSubID=" + SubCategory1.SubCategoryID, con);
+                SqlDataReader SqlDr = com.ExecuteReader();
+                DataTable d = new DataTable();
+                d.Load(SqlDr);
+
+                ViewBag.cunt = d.Rows.Count;
+                con.Close();
+
+                return View("~/Views/Home/Products.cshtml", d);
             }
-            IEnumerable<SubCategory> SubCategorylist = (from e in db.SubCategory
-                                                        where e.FKServID==Servicea.ServicesID
-                                                         select e);
-       
-            string sub = "";
-            foreach (SubCategory item in SubCategorylist)
+            catch (Exception)
             {
-                sub += item.SubCateName + ",";
+                return View();
             }
-            ViewBag.SubCategory = sub;
+        }
+        [HttpGet]
+        public ActionResult GetSearchProduct(string searchname)
+        {
+            try
+            {
+
+        
+            //   string dd= RouteData.Values["CategoryID"].ToString();
+            Basics basic = (from e in db.Basics
+                            select e).First();
+            ViewBag.email = basic.email;
+            ViewBag.callus = basic.callus;
+            ViewBag.parImgtxt = basic.parImgtxt;
+            IEnumerable<SocialMedia> SocialMedialist = (from e in db.SocialMedia
+                                                        select e);
+            ViewData["listSocial"] = SocialMedialist;
+            IEnumerable<Services> Service = (from e in db.Services
+                                             select e);
+            string s = "";
+            foreach (Services item in Service)
+            {
+                s += item.Name + ",";
+            }
+            ViewBag.service = s;
           
-          
-            
-       
-            IEnumerable<Products> ProductsList = (from e in db.Products
-                                                where e.FKSubID == SubCategory1.SubCategoryID
-                                                    select e);
             con.Close();
             con.Open();
-            com = new SqlCommand("select * from Products where FKSubID=" + SubCategory1.SubCategoryID, con);
+            com = new SqlCommand("select * from Products where Text like N'%" + searchname+"%'", con);
             SqlDataReader SqlDr = com.ExecuteReader();
             DataTable d = new DataTable();
             d.Load(SqlDr);
 
             ViewBag.cunt = d.Rows.Count;
             con.Close();
-
+            
             return View("~/Views/Home/Products.cshtml", d);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
-    
+
         public ActionResult E_Products()
         {
             Basics basic = (from e in db.Basics
@@ -476,6 +542,8 @@ namespace AbaHussainWebSite.Controllers
         [HttpGet]
         public ActionResult E_GetProducts(string service_Name, string CategoryID)
         {
+            try
+            { 
             Basics basic = (from e in db.Basics
                             select e).OrderByDescending(e => e.BasicID)
                    .FirstOrDefault();
@@ -511,10 +579,17 @@ namespace AbaHussainWebSite.Controllers
                 Servicea = (from e in db.Services
                             where e.enName == service_Name
                             select e).First();
-                SubCategory1 = (from e in db.SubCategory
-                                where e.FKServID == Servicea.ServicesID
-                                select e).First();
-            }
+                    try
+                    {
+                        SubCategory1 = (from e in db.SubCategory
+                                        where e.FKServID == Servicea.ServicesID
+                                        select e).First();
+                    }
+                    catch
+                    {
+                        return View("~/Views/Home/E_Products.cshtml", null);
+                    }
+                }
             IEnumerable<SubCategory> SubCategorylist = (from e in db.SubCategory
                                                         where e.FKServID == Servicea.ServicesID
                                                         select e);
@@ -543,7 +618,56 @@ namespace AbaHussainWebSite.Controllers
             con.Close();
 
             return View("~/Views/Home/E_Products.cshtml", d);
-        }
 
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        [HttpGet]
+        public ActionResult E_GetSearchProduct(string searchname)
+        {
+            try
+            {
+
+         
+            Basics basic = (from e in db.Basics
+                            select e).OrderByDescending(e => e.BasicID)
+                   .FirstOrDefault();
+
+            ViewBag.email = basic.email;
+            ViewBag.callus = basic.callus;
+            ViewBag.parImgtxt = basic.parImgtxt;
+            IEnumerable<SocialMedia> SocialMedialist = (from e in db.SocialMedia
+                                                        select e);
+            ViewData["listSocial"] = SocialMedialist;
+            IEnumerable<Services> Service = (from e in db.Services
+                                             select e);
+            string s = "";
+            foreach (Services item in Service)
+            {
+                s += item.enName + ",";
+            }
+            ViewBag.service = s;
+       
+            con.Close();
+            con.Open();
+            com = new SqlCommand("select * from Products where enText like '%" + searchname + "%'", con);
+            SqlDataReader SqlDr = com.ExecuteReader();
+            DataTable d = new DataTable();
+            d.Load(SqlDr);
+
+            ViewBag.cunt = d.Rows.Count;
+            con.Close();
+
+            return View("~/Views/Home/E_Products.cshtml", d);
+
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

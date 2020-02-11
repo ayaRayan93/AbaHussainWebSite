@@ -51,7 +51,7 @@
        $("#remove a").click(function (e) {
            
            var id = $(this).attr("id");
-           e.preventDefault();
+           var r = "/Dash/SocialMedia";
            var MSG = confirm("Are you sure you want to delete this Record?");
 
            if (MSG) {
@@ -61,10 +61,10 @@
                    type:"Post",
                    url: '@Url.Action("DeleteSocial", "Deleting")',
                    data: { id: id },
-                   dataType: "json",
+                  
                    success: function () {
                        $("#row_" + id).remove();
-                       window.location.reload();
+                       window.location.href = r;
                        
                    },
                    error: function () {

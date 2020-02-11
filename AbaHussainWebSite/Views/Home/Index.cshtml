@@ -3,15 +3,21 @@
 
 
 <section class="ftco-section ftco-no-pt ftco-margin-top">
-    <div class="row">
-        <div style="background-image:url(../../images/bg_2.jpeg);width:100% ;height:600px;background-size:contain;background-repeat:no-repeat">
-            <h1 class="mb-4">@Html.DisplayFor(modelItem => modelItem.mainImagText1)</h1>
-            <h3 class="subheading">@Html.DisplayFor(modelItem => modelItem.parImgtxt)</h3>
-            <h1 class="mb-4">@Html.DisplayFor(modelItem => modelItem.mainImagText2)</h1>
-            <h3 class="subheading">@Html.DisplayFor(modelItem => modelItem.parImgtxt)</h3>
+    <div class="container-fluid" dir="rtl" style="text-align:right">
+        <div class="row justify-content-center">
+            <div class="col-md ftco-intro" style="margin-left:20px">
+                <h1 class="mb-4">@Html.DisplayFor(modelItem => modelItem.mainImagText1)</h1>
+                <h3 class="subheading">@Html.DisplayFor(modelItem => modelItem.parImgtxt)</h3>
+                <h1 class="mb-4">@Html.DisplayFor(modelItem => modelItem.mainImagText2)</h1>
+                <h3 class="subheading">@Html.DisplayFor(modelItem => modelItem.parImgtxt)</h3>
 
-        </div>
-        @*<div class="slider-item" style="background-image:url(../../images/bg_2.jpeg);" data-stellar-background-ratio="0.5">
+            </div>
+            <div  class="col-md ftco-intro">
+            
+                <img src="@Url.Content(ViewBag.ImageBackground)" width="100%" height="700px" />
+            </div>
+     
+            @*<div class="slider-item" style="background-image:url(../../images/bg_2.jpeg);" data-stellar-background-ratio="0.5">
                 <div class="overlay"></div>
                 <div class="container">
                     <div class="row no-gutters slider-text align-items-center justify-content-end" data-scrollax-parent="false">
@@ -23,12 +29,13 @@
                 </div>
             </div>*@
 
-    </div>
+        </div>
+        </div>
 </section>
 
-<section class="ftco-section ftco-no-pt ftco-margin-top">
-    <div class="container" dir="rtl" style="text-align:right">
-        <div class="row">
+<section class="ftco-section ftco-no-pt ftco-margin-top bg-light">
+    <div class="container-fluid" dir="rtl" style="text-align:right">
+        <div class="row justify-content-center">
 
             <div class="col-md-8 wrap-about py-5 ftco-animate">
                 <div class="heading-section mb-5">
@@ -40,34 +47,34 @@
                     </p>
                 </div>
             </div>
-            <div class="col-md-4">
-            </div>
+         
 
         </div>
     </div>
 </section>
 <section class="ftco-intro" style="background-image: url(../../images/bg_3.jpeg);" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
-    <div class="container">
+    <div class="container-fluid" dir="rtl" style="text-align:right">
         <div class="row justify-content-center">
-            <div class="col-md-9 text-center">
+            <div class="col-md-8 text-center">
                 <h2>@Html.DisplayFor(modelItem => modelItem.headerMidtxt)</h2>
                 <p>@Html.DisplayFor(modelItem => modelItem.ParagMidtxt)</p>
             </div>
+         
         </div>
     </div>
 </section>
 <section class="ftco-services ftco-no-pt">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row justify-content-center mb-5 pb-2">
             <div class="col-md-8 text-center heading-section ftco-animate">
                 <span class="subheading">الخدمات</span>
                 <h2 class="mb-4">خدماتنا</h2>
                 <p>@Html.DisplayFor(modelItem => modelItem.ourServtxt)</p>
             </div>
+        
         </div>
         <div class="row">
-
             @{Html.RenderAction("_services", "Home");
             }
         </div>
@@ -77,13 +84,14 @@
 
 
 <section class="ftco-section bg-light">
-    <div class="container">
-        <div class="row justify-content-center mb-5 pb-2">
-            <div class="col-md-8 text-center heading-section ftco-animate">
+    <div class="container-fluid"dir="rtl" style="text-align:right">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center heading-section ftco-animate">
                 <span class="subheading">جديد من الشركة</span>
                 <h2 class="mb-4">الاخبار الحديثة</h2>
                 <p>@Html.DisplayFor(modelItem => modelItem.maintextNews)</p>
             </div>
+          
         </div>
         <div class="row">
             @{Html.RenderAction("_news", "Home");

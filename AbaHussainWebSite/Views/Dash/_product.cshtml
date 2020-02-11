@@ -48,8 +48,9 @@
                         }
                 </td>
                 <td>
-                    @{  System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial catalog=hamdymor_abahussainweb;Persist Security Info=True;");
-                        //System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(@"Data Source=.;Initial Catalog=maindb;Persist Security Info=True;");
+                    @{ 
+                        System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(@"Data Source=198.38.83.200;User Id=hamdymor_abahussain;Password=abahussain@123;Initial Catalog=hamdymor_abahussainweb;Persist Security Info=True;");
+                        // System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(@"Data Source=.;Initial Catalog=maindb;Integrated Security=True");
                         con.Open();
                         System.Data.SqlClient.SqlCommand com = new System.Data.SqlClient.SqlCommand("select * from SubCategory where SubCategoryID=" + Model.Rows[i]["FKSubID"], con);
                         System.Data.SqlClient.SqlDataReader SqlDr = com.ExecuteReader();
@@ -80,7 +81,7 @@
        $("#remove a").click(function (e) {
            e.preventDefault();
            var id = $(this).attr("id");
-
+           var r = "/Dash/products";
            var MSG = confirm("Are you sure you want to delete this Record?");
 
            if (MSG) {
@@ -90,7 +91,8 @@
                    url: '/Deleting/Deleteproducts/id',
                    data: { id: id },
                    success: function () {
-                       $("#row_"+id).remove;
+                       $("#row_" + id).remove;
+                       window.location.href = r;
                    },
                    error: function () {
 

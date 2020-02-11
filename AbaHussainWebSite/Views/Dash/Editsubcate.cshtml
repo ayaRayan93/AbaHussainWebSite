@@ -15,7 +15,7 @@
 
             <div class="" dir="rtl" style="margin:auto auto; text-align:right;width:600px">
                 <p style="color:red">@ViewBag.Emsg</p>
-
+                @Html.HiddenFor(model => model.SubCategoryID)
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
                     <div class="col-md-12">
